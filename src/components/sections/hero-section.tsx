@@ -2,24 +2,35 @@
 
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { motion } from "motion/react"
+import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import { SectionWrapper } from "@/components/layout"
 
 interface HeroSectionProps {
   className?: string
-  headline?: string
+  words?: { text: string; className?: string }[]
   subline?: string
   description?: string
   ctaLabel?: string
   ctaHref?: string
 }
 
+const defaultWords = [
+  { text: "Créer", className: "text-foreground" },
+  { text: "des", className: "text-foreground" },
+  { text: "expériences", className: "text-foreground" },
+  { text: "digitales", className: "text-primary" },
+  { text: "qui", className: "text-foreground" },
+  { text: "comptent.", className: "text-foreground" },
+]
+
 export function HeroSection({
   className,
-  headline = "Créer des expériences digitales qui comptent",
-  subline = "Développeur full-stack & design d’interfaces",
-  description = "Je conçois et développe des applications web performantes, accessibles et centrées sur l’utilisateur. Passionné par le code propre et les interfaces pensées pour les humains.",
+  words = defaultWords,
+  subline = "Développeur full-stack & design d'interfaces",
+  description = "Je conçois et développe des applications web performantes, accessibles et centrées sur l'utilisateur. Passionné par le code propre et les interfaces pensées pour les humains.",
   ctaLabel = "Voir mes projets",
   ctaHref = `#${siteConfig.sections.projects}`,
 }: HeroSectionProps) {
@@ -32,19 +43,35 @@ export function HeroSection({
       )}
       containerClassName="flex flex-col items-center text-center"
     >
-      <p
-        id={`${siteConfig.sections.hero}-heading`}
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
         className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground md:text-sm"
       >
         {subline}
-      </p>
-      <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-        {headline}
-      </h1>
-      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+      </motion.p>
+      <div className="mt-6 flex flex-col items-center justify-center">
+        <TypewriterEffectSmooth
+          words={words}
+          className="text-foreground"
+          cursorClassName="bg-primary h-6 w-1 sm:h-8 md:h-10"
+        />
+      </div>
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
+      >
         {description}
-      </p>
-      <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+      </motion.p>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.35 }}
+        className="mt-10 flex flex-wrap items-center justify-center gap-4"
+      >
         <Link
           href={ctaHref}
           className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -58,7 +85,7 @@ export function HeroSection({
         >
           Me contacter
         </Link>
-      </div>
+      </motion.div>
     </SectionWrapper>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { motion } from "motion/react"
 import { Award } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
@@ -48,8 +49,14 @@ export function CertificationsSection({
         <p className="mt-2 text-muted-foreground">{subtitle}</p>
       </div>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {certifications.map((cert) => (
-          <li key={cert.name}>
+        {certifications.map((cert, i) => (
+          <motion.li
+            key={cert.name}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-20px" }}
+            transition={{ duration: 0.4, delay: i * 0.05 }}
+          >
             {cert.url ? (
               <Link
                 href={cert.url}
@@ -86,7 +93,7 @@ export function CertificationsSection({
                 </div>
               </article>
             )}
-          </li>
+          </motion.li>
         ))}
       </ul>
     </SectionWrapper>

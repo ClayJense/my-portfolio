@@ -1,10 +1,13 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
+import { motion } from "motion/react"
 import { ArrowUpRight, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import { SectionWrapper } from "@/components/layout"
+import { LinkPreview } from "@/components/ui/link-preview"
 
 export interface Project {
   title: string
@@ -12,6 +15,62 @@ export interface Project {
   href?: string
   external?: boolean
   tags?: string[]
+  image?: string
+  /** Slugs Simple Icons pour les icônes (ex: react, nextdotjs, typescript) */
+  techIcons?: string[]
+}
+
+const defaultProjects: Project[] = [
+  {
+    title: "Application e-commerce",
+    description:
+      "Plateforme de vente en ligne avec panier, paiement et tableau de bord admin.",
+    href: "https://vercel.com",
+    external: true,
+    tags: ["Next.js", "TypeScript", "Stripe"],
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
+    techIcons: ["nextdotjs", "typescript", "stripe"],
+  },
+  {
+    title: "Dashboard analytics",
+    description:
+      "Tableau de bord temps réel pour visualisation de métriques et rapports.",
+    href: "https://vercel.com",
+    external: true,
+    tags: ["React", "API", "Data viz"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+    techIcons: ["react", "nodedotjs", "postgresql"],
+  },
+  {
+    title: "Site vitrine & blog",
+    description:
+      "Site institutionnel avec blog, formulaire de contact et intégration CMS headless.",
+    href: "https://vercel.com",
+    external: true,
+    tags: ["Next.js", "CMS", "SEO"],
+    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80",
+    techIcons: ["nextdotjs", "tailwindcss", "vercel"],
+  },
+]
+
+function TechIcon({ slug }: { slug: string }) {
+  const src = `https://cdn.simpleicons.org/${slug}`
+  const name = slug.replace("dotjs", ".js").replace("dot", " ")
+  return (
+    <span
+      className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted p-1.5"
+      title={name}
+    >
+      <Image
+        src={src}
+        alt=""
+        width={20}
+        height={20}
+        className="object-contain opacity-90"
+        unoptimized
+      />
+    </span>
+  )
 }
 
 interface ProjectsSectionProps {
@@ -20,33 +79,6 @@ interface ProjectsSectionProps {
   subtitle?: string
   projects?: Project[]
 }
-
-const defaultProjects: Project[] = [
-  {
-    title: "Application e-commerce",
-    description:
-      "Plateforme de vente en ligne avec panier, paiement et tableau de bord admin. Next.js, Stripe, base de données relationnelle.",
-    href: "#",
-    external: true,
-    tags: ["Next.js", "TypeScript", "Stripe"],
-  },
-  {
-    title: "Dashboard analytics",
-    description:
-      "Tableau de bord temps réel pour visualisation de métriques et rapports. React, API REST, graphiques interactifs.",
-    href: "#",
-    external: true,
-    tags: ["React", "API", "Data viz"],
-  },
-  {
-    title: "Site vitrine & blog",
-    description:
-      "Site institutionnel avec blog, formulaire de contact et intégration CMS headless pour la gestion des contenus.",
-    href: "#",
-    external: true,
-    tags: ["Next.js", "CMS", "SEO"],
-  },
-]
 
 export function ProjectsSection({
   className,
@@ -70,8 +102,19 @@ export function ProjectsSection({
       </div>
       <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => {
-          const content = (
+          const cardContent = (
             <>
+              {project.image && (
+                <div className="relative -mx-6 -mt-6 mb-4 aspect-video overflow-hidden rounded-t-xl">
+                  <Image
+                    src={project.image}
+                    alt=""
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              )}
               <div className="flex items-start justify-between gap-2">
                 <h3 className="font-semibold text-foreground group-hover:underline">
                   {project.title}
@@ -83,11 +126,18 @@ export function ProjectsSection({
                     <ArrowUpRight className="size-4 shrink-0 text-muted-foreground" />
                   ))}
               </div>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
                 {project.description}
               </p>
-              {project.tags && project.tags.length > 0 && (
+              {project.techIcons && project.techIcons.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">
+                  {project.techIcons.map((slug) => (
+                    <TechIcon key={slug} slug={slug} />
+                  ))}
+                </div>
+              )}
+              {project.tags && project.tags.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
@@ -101,23 +151,43 @@ export function ProjectsSection({
             </>
           )
 
+          const cardClassName =
+            "group flex h-full flex-col rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm transition-all hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+
           return (
-            <li key={project.title}>
+            <motion.li
+              key={project.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ duration: 0.4 }}
+            >
               {project.href ? (
-                <Link
-                  href={project.href}
-                  target={project.external ? "_blank" : undefined}
-                  rel={project.external ? "noopener noreferrer" : undefined}
-                  className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm transition-all hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {content}
-                </Link>
+                project.image ? (
+                  <LinkPreview
+                    url={project.href}
+                    isStatic
+                    imageSrc={project.image}
+                    width={320}
+                    height={200}
+                    className={cardClassName}
+                  >
+                    {cardContent}
+                  </LinkPreview>
+                ) : (
+                  <Link
+                    href={project.href}
+                    target={project.external ? "_blank" : undefined}
+                    rel={project.external ? "noopener noreferrer" : undefined}
+                    className={cardClassName}
+                  >
+                    {cardContent}
+                  </Link>
+                )
               ) : (
-                <div className="flex h-full flex-col rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm">
-                  {content}
-                </div>
+                <div className={cardClassName}>{cardContent}</div>
               )}
-            </li>
+            </motion.li>
           )
         })}
       </ul>
