@@ -18,19 +18,19 @@ interface HeroSectionProps {
 }
 
 const defaultWords = [
-  { text: "Créer", className: "text-foreground" },
+  { text: "Construire", className: "text-foreground" },
   { text: "des", className: "text-foreground" },
-  { text: "expériences", className: "text-foreground" },
-  { text: "digitales", className: "text-primary" },
-  { text: "qui", className: "text-foreground" },
-  { text: "comptent.", className: "text-foreground" },
+  { text: "applications", className: "text-foreground" },
+  { text: "stables", className: "text-primary" },
+  { text: "et", className: "text-foreground" },
+  { text: "utiles.", className: "text-foreground" },
 ]
 
 export function HeroSection({
   className,
   words = defaultWords,
-  subline = "Développeur full-stack & design d'interfaces",
-  description = "Je conçois et développe des applications web performantes, accessibles et centrées sur l'utilisateur. Passionné par le code propre et les interfaces pensées pour les humains.",
+  subline = "Développeur full‑stack orienté backend & DevOps",
+  description = "Développeur full‑stack avec quelques années d'expérience, je travaille surtout sur le backend (Laravel, Spring Boot, Nest.js) tout en construisant des interfaces modernes avec Angular et Next.js. J'explore aussi la partie DevOps : Linux, Docker et déploiements sur le cloud.",
   ctaLabel = "Voir mes projets",
   ctaHref = `#${siteConfig.sections.projects}`,
 }: HeroSectionProps) {

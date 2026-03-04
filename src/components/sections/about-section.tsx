@@ -15,17 +15,18 @@ interface AboutSectionProps {
 }
 
 const defaultParagraphs = [
-  "Après plusieurs années d'expérience en développement web, je m'attache à livrer des produits à la fois robustes techniquement et agréables à utiliser. Mon approche combine rigueur technique et sens du design.",
-  "Je travaille principalement avec React, Next.js et TypeScript côté front-end, et Node.js ou des API headless côté back-end. Je porte une attention particulière à l'accessibilité, aux performances et au SEO.",
+  "Après plusieurs années d'expérience en développement web, je m'attache à livrer des produits à la fois robustes techniquement et agréables à utiliser. Mon approche combine rigueur backend, front moderne et sens du design.",
+  "Je code principalement côté serveur avec Laravel, Spring Boot et Nest.js, et côté front avec Angular et Next.js. J'ai aussi une forte sensibilité DevOps : Linux au quotidien, Docker, intégration continue et déploiement sur le cloud.",
 ]
 
 const defaultSkills = [
-  "React / Next.js",
-  "TypeScript",
-  "Node.js",
+  "Backend : Laravel, Spring Boot, Nest.js",
+  "Frontend : Angular, Next.js",
+  "TypeScript / JavaScript",
+  "Docker / Linux",
+  "Cloud & DevOps (CI/CD)",
   "Accessibilité (a11y)",
-  "Performance web",
-  "Design systems",
+  "Performance & bonnes pratiques",
 ]
 
 export function AboutSection({
