@@ -165,8 +165,8 @@ export function ChatPanel({
         {isTyping && <TypingIndicator />}
       </div>
 
-      {/* Input — pb-20 sur mobile pour remonter au-dessus du Dock */}
-      <div className="border-t border-border p-3 pb-3 sm:pb-3 max-sm:pb-20">
+      {/* Input */}
+      <div className="border-t border-border p-3 pb-3 sm:pb-3 max-sm:pb-4">
         <div className="flex items-end gap-2 rounded-xl bg-muted/50 border border-border px-3 py-2 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1 focus-within:ring-offset-background transition-shadow">
           <textarea
             value={input}

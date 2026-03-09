@@ -15,11 +15,11 @@ export function ChatToggleButton({ isOpen, onClick, className }: ChatToggleButto
     <motion.button
       onClick={onClick}
       className={cn(
-        "fixed bottom-20 right-4 z-50 flex items-center justify-center",
-        "size-12 sm:size-14 rounded-full shadow-lg cursor-pointer",
+        "fixed z-50 flex items-center justify-center rounded-full shadow-lg cursor-pointer",
         "bg-primary text-primary-foreground",
-        "hover:shadow-xl hover:scale-105 active:scale-95",
-        "transition-shadow",
+        "hover:shadow-xl hover:scale-105 active:scale-95 transition-shadow",
+        "size-11 right-3 bottom-4 sm:size-14 sm:right-4 sm:bottom-20",
+        "max-sm:right-[max(0.75rem,env(safe-area-inset-right))] max-sm:bottom-[max(1rem,env(safe-area-inset-bottom))]",
         className,
       )}
       whileHover={{ scale: 1.05 }}
@@ -48,7 +48,7 @@ export function ChatToggleButton({ isOpen, onClick, className }: ChatToggleButto
             exit={{ rotate: -90, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <MessageCircle className="size-5 sm:size-6" />
+            <MessageCircle className="size-4 sm:size-6" />
           </motion.span>
         )}
       </AnimatePresence>

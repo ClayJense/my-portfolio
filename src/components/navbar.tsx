@@ -9,7 +9,10 @@ import {
   Home,
   FileText,
   Mail,
+  PanelBottomOpen,
+  X,
 } from "lucide-react"
+import { motion, AnimatePresence } from "motion/react"
 import { Dock, DockIcon } from "@/components/ui/dock"
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler"
 import { cn } from "@/lib/utils"
@@ -113,69 +116,160 @@ function SvgIcon({ path, className }: { path: string; className?: string }) {
 export function Navbar() {
   const pathname = usePathname()
   const isMobile = useIsMobile()
+  const [menuOpen, setMenuOpen] = useState(false)
 
-  const iconSize = isMobile ? 28 : 36
-  const iconClassName = isMobile ? "size-4" : "size-5"
+  useEffect(() => {
+    if (menuOpen) document.body.style.overflow = "hidden"
+    else document.body.style.overflow = ""
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [menuOpen])
+
+  const iconSize = 36
+  const iconClassName = "size-5"
 
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-2 sm:pb-4 px-2"
-      aria-label="Navigation"
-    >
-      <Dock
-        direction="bottom"
-        className="h-12 sm:h-14 gap-1.5 sm:gap-3 px-2 sm:px-4"
-        iconSize={iconSize}
-        iconMagnification={isMobile ? iconSize : 48}
-        disableMagnification={isMobile}
-        iconDistance={80}
-      >
-        {pageLinks.map(({ href, label, icon: Icon }) => (
-          <DockIcon key={label}>
-            <DockItem
-              href={href}
-              label={label}
-              icon={<Icon className={iconClassName} />}
-              isActive={pathname === href || (href !== "/" && pathname.startsWith(href))}
-            />
-          </DockIcon>
-        ))}
-        <div className="mx-0.5 sm:mx-1 w-px self-stretch bg-border shrink-0" aria-hidden />
-        {socialLinks.map((link) => (
-          <DockIcon key={link.label}>
-            <DockItem
-              href={link.href}
-              label={link.label}
-              icon={
-                "icon" in link && link.icon ? (
-                  <link.icon className={iconClassName} />
-                ) : (
-                  <SvgIcon path={(link as { svgPath: string }).svgPath} className={iconClassName} />
-                )
-              }
-              external
-            />
-          </DockIcon>
-        ))}
-        <div className="mx-0.5 sm:mx-1 w-px self-stretch bg-border shrink-0" aria-hidden />
-        <DockIcon>
-          <div className="group relative flex flex-col items-center size-full">
-            <span
-              className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-popover text-popover-foreground text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 border border-border shadow-sm hidden sm:block"
+    <>
+      {/* Mobile: bouton menu en haut à droite (z-40 pour passer derrière le chatbot) */}
+      <div className="fixed top-0 right-0 z-40 p-3 sm:p-4 sm:hidden">
+        <button
+          type="button"
+          onClick={() => setMenuOpen((o) => !o)}
+          className="flex size-11 items-center justify-center rounded-xl border border-border bg-background/95 backdrop-blur shadow-sm text-foreground hover:bg-muted transition-colors cursor-pointer"
+          aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? <X className="size-5" /> : <PanelBottomOpen className="size-5" />}
+        </button>
+      </div>
+
+      {/* Mobile: panneau menu en haut (sous le bouton) */}
+      <AnimatePresence>
+        {isMobile && menuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm sm:hidden"
+              onClick={() => setMenuOpen(false)}
               aria-hidden
-            >
-              Thème
-            </span>
-            <AnimatedThemeToggler
-              aria-label="Mode clair / sombre"
-              className={cn(
-                "text-foreground hover:text-foreground/80 transition-colors flex items-center justify-center size-full cursor-pointer",
-                isMobile ? "[&_svg]:size-4" : "[&_svg]:size-5"
-              )}
             />
-          </div>
-        </DockIcon>
-      </Dock>
-    </nav>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed top-16 left-4 right-4 z-40 rounded-2xl border border-border bg-card shadow-xl p-4 sm:hidden"
+            >
+              <nav className="flex flex-col gap-1" aria-label="Navigation mobile">
+                {pageLinks.map(({ href, label, icon: Icon }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    onClick={() => setMenuOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
+                      pathname === href || (href !== "/" && pathname.startsWith(href))
+                        ? "bg-primary text-primary-foreground"
+                        : "text-foreground hover:bg-muted"
+                    )}
+                  >
+                    <Icon className="size-5 shrink-0" />
+                    {label}
+                  </Link>
+                ))}
+                <div className="my-2 h-px bg-border" />
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+                  >
+                    {"icon" in link && link.icon ? (
+                      <link.icon className="size-5 shrink-0" />
+                    ) : (
+                      <SvgIcon path={(link as { svgPath: string }).svgPath} className="size-5 shrink-0" />
+                    )}
+                    {link.label}
+                  </a>
+                ))}
+                <div className="my-2 h-px bg-border" />
+                <div className="flex items-center gap-3 rounded-xl px-4 py-3">
+                  <span className="text-sm font-medium text-foreground">Thème</span>
+                  <AnimatedThemeToggler
+                    aria-label="Mode clair / sombre"
+                    className="ml-auto cursor-pointer [&_svg]:size-5"
+                  />
+                </div>
+              </nav>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop: Dock en bas */}
+      <nav
+        className="hidden sm:flex fixed bottom-0 left-0 right-0 z-50 justify-center pb-2 sm:pb-4 px-2"
+        aria-label="Navigation"
+      >
+        <Dock
+          direction="bottom"
+          className="h-14 gap-3 px-4"
+          iconSize={iconSize}
+          iconMagnification={48}
+          disableMagnification={false}
+          iconDistance={80}
+        >
+          {pageLinks.map(({ href, label, icon: Icon }) => (
+            <DockIcon key={label}>
+              <DockItem
+                href={href}
+                label={label}
+                icon={<Icon className={iconClassName} />}
+                isActive={pathname === href || (href !== "/" && pathname.startsWith(href))}
+              />
+            </DockIcon>
+          ))}
+          <div className="mx-1 w-px self-stretch bg-border shrink-0" aria-hidden />
+          {socialLinks.map((link) => (
+            <DockIcon key={link.label}>
+              <DockItem
+                href={link.href}
+                label={link.label}
+                icon={
+                  "icon" in link && link.icon ? (
+                    <link.icon className={iconClassName} />
+                  ) : (
+                    <SvgIcon path={(link as { svgPath: string }).svgPath} className={iconClassName} />
+                  )
+                }
+                external
+              />
+            </DockIcon>
+          ))}
+          <div className="mx-1 w-px self-stretch bg-border shrink-0" aria-hidden />
+          <DockIcon>
+            <div className="group relative flex flex-col items-center size-full">
+              <span
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1 rounded-md bg-popover text-popover-foreground text-xs font-medium whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 border border-border shadow-sm"
+                aria-hidden
+              >
+                Thème
+              </span>
+              <AnimatedThemeToggler
+                aria-label="Mode clair / sombre"
+                className="text-foreground hover:text-foreground/80 transition-colors flex items-center justify-center size-full cursor-pointer [&_svg]:size-5"
+              />
+            </div>
+          </DockIcon>
+        </Dock>
+      </nav>
+    </>
   )
 }

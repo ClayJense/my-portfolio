@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, Mail, MapPin } from "lucide-react"
+import { ArrowLeft, Mail, MessageCircle } from "lucide-react"
 import { ContactForm } from "@/components/contact/contact-form"
 
 export const metadata = {
@@ -48,15 +48,20 @@ export default function ContactPage() {
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <MapPin className="size-5" />
+                  <MessageCircle className="size-5" />
                 </span>
                 <div>
                   <span className="block text-sm font-medium text-foreground">
-                    Localisation
+                    WhatsApp
                   </span>
-                  <span className="text-sm">
-                    Disponible en remote & sur site
-                  </span>
+                  <a
+                    href="https://wa.me/33600000000"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm hover:underline"
+                  >
+                    Me contacter sur WhatsApp
+                  </a>
                 </div>
               </li>
             </ul>
