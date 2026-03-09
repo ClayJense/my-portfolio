@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: "Mon Portfolio",
   description: "Portfolio professionnel — Développement web & expériences utilisateur",
+  assistantName: "Nova",
   nav: [
     { label: "Accueil", href: "/" },
     { label: "Blog", href: "/blog" },

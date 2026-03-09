@@ -1,31 +1,68 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import { motion } from "motion/react"
-import { Send } from "lucide-react"
+import { Send, Search } from "lucide-react"
 import { countryPhoneOptions, getFlagEmoji, getPhonePlaceholder } from "@/data/countries"
 import type { ContactFormData } from "@/types"
 import { cn } from "@/lib/utils"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const initialForm: ContactFormData = {
   name: "",
   email: "",
-  countryCode: "FR",
+  countryCode: "SN",
   phone: "",
   message: "",
+}
+
+function filterCountries(query: string) {
+  const q = query.trim().toLowerCase()
+  if (!q) return countryPhoneOptions
+  return countryPhoneOptions.filter(
+    (c) =>
+      c.name.toLowerCase().includes(q) ||
+      c.code.toLowerCase().includes(q) ||
+      c.dialCode.includes(query.trim())
+  )
 }
 
 export function ContactForm() {
   const [form, setForm] = useState<ContactFormData>(initialForm)
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
+  const [countrySearch, setCountrySearch] = useState("")
+  const [selectOpen, setSelectOpen] = useState(false)
+  const searchInputRef = useRef<HTMLInputElement>(null)
 
   const phonePlaceholder = getPhonePlaceholder(form.countryCode)
+  const filteredCountries = useMemo(
+    () => filterCountries(countrySearch),
+    [countrySearch]
+  )
+
+  useEffect(() => {
+    if (selectOpen) {
+      setCountrySearch("")
+      setTimeout(() => searchInputRef.current?.focus(), 0)
+    }
+  }, [selectOpen])
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleCountryChange = (value: string) => {
+    setForm((prev) => ({ ...prev, countryCode: value }))
+    setSelectOpen(false)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,6 +72,8 @@ export function ContactForm() {
     setStatus("success")
     setForm(initialForm)
   }
+
+  const selectedCountry = countryPhoneOptions.find((c) => c.code === form.countryCode)
 
   return (
     <motion.form
@@ -59,7 +98,7 @@ export function ContactForm() {
             required
             value={form.name}
             onChange={handleChange}
-            placeholder="Jean Dupont"
+            placeholder="Votre nom"
             className={cn(
               "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground",
               "placeholder:text-muted-foreground",
@@ -82,7 +121,7 @@ export function ContactForm() {
             required
             value={form.email}
             onChange={handleChange}
-            placeholder="jean@exemple.fr"
+            placeholder="Votre email"
             className={cn(
               "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground",
               "placeholder:text-muted-foreground",
@@ -101,25 +140,69 @@ export function ContactForm() {
           >
             Pays
           </label>
-          <select
-            id="contact-country"
-            name="countryCode"
+          <Select
             value={form.countryCode}
-            onChange={handleChange}
-            className={cn(
-              "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground",
-              "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-              "transition-shadow cursor-pointer appearance-none",
-              "bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270 0 24 24%27 stroke=%27%236b7280%27%3E%3Cpath stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%272%27 d=%27M19 9l-7 7-7-7%27/%3E%3C/svg%3E')] bg-[length:1rem] bg-[right_0.4rem_center] bg-no-repeat pr-8"
-            )}
-            style={{ paddingRight: "1.75rem" }}
+            onValueChange={handleCountryChange}
+            open={selectOpen}
+            onOpenChange={setSelectOpen}
           >
-            {countryPhoneOptions.map((c) => (
-              <option key={c.code} value={c.code}>
-                {getFlagEmoji(c.code)} {c.name} ({c.dialCode})
-              </option>
-            ))}
-          </select>
+            <SelectTrigger
+              id="contact-country"
+              className="w-full rounded-lg h-10 px-3 text-sm"
+            >
+              <SelectValue>
+                {selectedCountry && (
+                  <span className="flex items-center gap-2">
+                    <span>{getFlagEmoji(selectedCountry.code)}</span>
+                    <span>{selectedCountry.name}</span>
+                    <span className="text-muted-foreground">({selectedCountry.dialCode})</span>
+                  </span>
+                )}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="max-h-[min(320px,70vh)]" position="popper">
+              <div
+                className="sticky top-0 z-10 border-b border-border bg-popover p-2"
+                onPointerDown={(e) => e.stopPropagation()}
+              >
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="Rechercher un pays..."
+                    value={countrySearch}
+                    onChange={(e) => setCountrySearch(e.target.value)}
+                    onKeyDown={(e) => e.stopPropagation()}
+                    className={cn(
+                      "w-full rounded-md border border-input bg-background py-2 pl-8 pr-3 text-sm text-foreground",
+                      "placeholder:text-muted-foreground",
+                      "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-0"
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="p-1 max-h-[260px] overflow-y-auto">
+                {filteredCountries.length === 0 ? (
+                  <div className="py-6 text-center text-sm text-muted-foreground">
+                    Aucun pays trouvé
+                  </div>
+                ) : (
+                  filteredCountries.map((c) => (
+                    <SelectItem
+                      key={c.code}
+                      value={c.code}
+                      className="flex items-center gap-2 py-2"
+                    >
+                      <span>{getFlagEmoji(c.code)}</span>
+                      <span>{c.name}</span>
+                      <span className="text-muted-foreground">({c.dialCode})</span>
+                    </SelectItem>
+                  ))
+                )}
+              </div>
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-2">
           <label
@@ -159,7 +242,7 @@ export function ContactForm() {
           rows={5}
           value={form.message}
           onChange={handleChange}
-          placeholder="Décrivez votre projet ou votre demande..."
+          placeholder="Votre message"
           className={cn(
             "w-full resize-y rounded-lg border border-input bg-background px-4 py-3 text-foreground",
             "placeholder:text-muted-foreground",
@@ -171,7 +254,7 @@ export function ContactForm() {
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-muted-foreground">
-          En envoyant ce formulaire, vous acceptez d'être recontacté concernant
+          En envoyant ce formulaire, vous acceptez d&apos;être recontacté concernant
           votre demande.
         </p>
         <motion.button

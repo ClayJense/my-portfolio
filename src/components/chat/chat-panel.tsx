@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react"
 import { motion } from "motion/react"
 import { Bot, Send, X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { siteConfig } from "@/config/site"
 import type { ChatMessage } from "@/types/chat"
 
 interface ChatPanelProps {
@@ -126,7 +127,7 @@ export function ChatPanel({
           <Bot className="size-4.5 text-primary" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-semibold text-foreground">Assistant IA</h3>
+          <h3 className="text-sm font-semibold text-foreground">{siteConfig.assistantName}</h3>
           <div className="flex items-center gap-1.5">
             <span className="relative flex size-2">
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
@@ -152,7 +153,7 @@ export function ChatPanel({
               <Bot className="size-7 text-primary" />
             </div>
             <p className="text-sm font-medium text-foreground mb-1">
-              Salut ! Je suis l&apos;assistant d&apos;Iza
+              Salut ! Je suis {siteConfig.assistantName}, l&apos;assistant d&apos;Iza
             </p>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Pose-moi une question sur son parcours, ses projets ou ses compétences.
