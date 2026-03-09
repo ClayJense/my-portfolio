@@ -94,4 +94,9 @@ export const projectStackIcons = {
   LWS: "https://lws.info/wp-content/uploads/2025/01/cropped-LWS-fr.png",
   Git: "https://cdn.simpleicons.org/git/F05032",
   GitHub: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+  HTML: "https://cdn.simpleicons.org/html5/E34F26",
+  CSS: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
+  JavaScript: "https://cdn.simpleicons.org/javascript/F7DF1E",
+  Python: "https://cdn.simpleicons.org/python/3776AB",
+  Flask: "https://cdn.simpleicons.org/flask/000000",
 } as const

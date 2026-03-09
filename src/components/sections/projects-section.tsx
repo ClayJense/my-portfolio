@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "motion/react"
@@ -17,6 +18,8 @@ export interface ProjectTechIcon {
 export interface Project {
   title: string
   description: string
+  /** Mois et année uniquement, ex. "Juillet 2024" */
+  date?: string
   tags?: string[]
   /** Image de couverture ou poster si vidéo */
   image?: string
@@ -34,6 +37,7 @@ const defaultProjects: Project[] = [
     title: "Université Dakar-Bourguiba (UDB)",
     description:
       "Projet réalisé lors d'un stage de 4 mois avec une équipe de 4 étudiants : site et applications pour l'université. Back-end Laravel, front-end Angular, base MySQL, hébergement OVH.",
+    date: "Juillet 2024",
     tags: ["Laravel", "Angular", "MySQL", "OVH"],
     image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80",
     techIcons: [
@@ -50,7 +54,8 @@ const defaultProjects: Project[] = [
   {
     title: "BIACode",
     description:
-      "Notre plateforme et agence, lancée à trois juste après la licence (L3). Créée à la suite du stage à l'UDB, BIACode est notre structure dédiée au développement et à l'accompagnement des projets numériques.",
+      "Notre plateforme et agence tech, lancée à trois. BIACode est notre structure dédiée au développement et à l'accompagnement des projets numériques.",
+    date: "Septembre 2024",
     tags: ["Agence", "Plateforme"],
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
     techIcons: [
@@ -68,6 +73,7 @@ const defaultProjects: Project[] = [
     title: "EASYTECS — EasyGEC",
     description:
       "Premier client de l'agence : plateforme pour EASYTECS, structure sénégalaise spécialisée dans les logiciels métiers. EasyGEC est un système d'enregistrement sécurisé et simple pour gérer les faits d'état civil (naissance au décès), garantissant les droits fondamentaux : carte d'identité, droit de vote, héritage, accès à l'école, permis de conduire, etc.",
+    date: "Mars 2026",
     tags: ["État civil", "e-Gouvernance", "Sénégal"],
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80",
     techIcons: [
@@ -101,9 +107,28 @@ function TechIcon({ url, name }: ProjectTechIcon) {
   )
 }
 
-/** Cadre type navigateur avec iframe : site en direct, mobile et desktop. Cadre plus grand pour bien voir l'interface. */
+const DESKTOP_VIEWPORT_WIDTH = 1280
+const DESKTOP_VIEWPORT_HEIGHT = 960
+
+/** Cadre type navigateur avec iframe : site en direct en vue desktop (1280px) puis mis à l'échelle. */
 function BrowserPreview({ url, title }: { url: string; title: string }) {
   const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "")
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const el = wrapperRef.current
+    if (!el) return
+    const updateScale = () => {
+      const w = el.offsetWidth
+      setScale(w > 0 ? w / DESKTOP_VIEWPORT_WIDTH : 1)
+    }
+    updateScale()
+    const ro = new ResizeObserver(updateScale)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
   return (
     <div className="flex flex-col overflow-hidden rounded-t-xl border-b border-border bg-muted/50">
       <div className="flex items-center gap-2 border-b border-border bg-card px-2 py-1.5 sm:px-3 sm:py-2">
@@ -118,16 +143,31 @@ function BrowserPreview({ url, title }: { url: string; title: string }) {
           </span>
         </div>
       </div>
-      {/* Cadre plus haut (4/3) pour mieux voir le site, surtout sur mobile */}
-      <div className="relative w-full bg-muted" style={{ aspectRatio: "4/3" }}>
-        <iframe
-          src={url}
-          title={`Aperçu : ${title}`}
-          className="absolute inset-0 h-full w-full border-0"
-          loading="lazy"
-          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-          referrerPolicy="no-referrer"
-        />
+      {/* Vue desktop : iframe 1280×960 → le site affiche sa version desktop, puis on scale pour remplir le cadre */}
+      <div
+        ref={wrapperRef}
+        className="relative w-full overflow-hidden bg-muted"
+        style={{ aspectRatio: "4/3" }}
+      >
+        <div
+          className="absolute left-0 top-0 origin-top-left"
+          style={{
+            width: DESKTOP_VIEWPORT_WIDTH,
+            height: DESKTOP_VIEWPORT_HEIGHT,
+            transform: `scale(${scale})`,
+          }}
+        >
+          <iframe
+            src={url}
+            title={`Aperçu : ${title}`}
+            width={DESKTOP_VIEWPORT_WIDTH}
+            height={DESKTOP_VIEWPORT_HEIGHT}
+            className="border-0"
+            loading="lazy"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            referrerPolicy="no-referrer"
+          />
+        </div>
       </div>
     </div>
   )
@@ -202,7 +242,12 @@ export function ProjectsSection({
                 </div>
               )}
               <div className="flex flex-1 flex-col p-4 sm:p-6">
-                <h3 className="font-semibold text-foreground">{project.title}</h3>
+                {project.date && (
+                  <p className="text-xs font-medium text-muted-foreground">{project.date}</p>
+                )}
+                <h3 className={cn("font-semibold text-foreground", project.date && "mt-0.5")}>
+                  {project.title}
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
                   {project.description}
                 </p>

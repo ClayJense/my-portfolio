@@ -13,14 +13,14 @@ function formatTimelineDate(dateStr: string): string {
   return d.toLocaleDateString("fr-FR", {
     year: "numeric",
     month: "long",
-    day: "numeric",
   })
 }
 
 export default function BlogPage() {
   const timelineData = blogPosts.map((post) => ({
+    id: post.slug,
     title: formatTimelineDate(post.date),
-    content: <BlogTimelineContent post={post} />,
+    content: <BlogTimelineContent key={post.slug} post={post} />,
   }))
 
   return (
@@ -29,7 +29,7 @@ export default function BlogPage() {
         <Timeline
           data={timelineData}
           title="Blog"
-          subtitle="Articles, tutoriels et retours d'expérience sur le développement web et le design."
+          subtitle="Réalisations et projets : assistant IA, sites et plateformes."
         />
       </div>
     </div>
