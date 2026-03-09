@@ -46,11 +46,10 @@ export function ContactForm() {
     [countrySearch]
   )
 
+  // Ne pas focus le champ recherche à l'ouverture : sur mobile ça ouvre le clavier
+  // et le redimensionnement ferme le select. L'utilisateur peut taper dans la recherche s'il veut.
   useEffect(() => {
-    if (selectOpen) {
-      setCountrySearch("")
-      setTimeout(() => searchInputRef.current?.focus(), 0)
-    }
+    if (selectOpen) setCountrySearch("")
   }, [selectOpen])
 
   const handleChange = (
@@ -161,8 +160,9 @@ export function ContactForm() {
               </SelectValue>
             </SelectTrigger>
             <SelectContent className="max-h-[min(320px,70vh)]" position="popper">
+              {/* Champ recherche masqué sur mobile : le focus ouvre le clavier et ferme le select */}
               <div
-                className="sticky top-0 z-10 border-b border-border bg-popover p-2"
+                className="sticky top-0 z-10 hidden border-b border-border bg-popover p-2 sm:block"
                 onPointerDown={(e) => e.stopPropagation()}
               >
                 <div className="relative">
