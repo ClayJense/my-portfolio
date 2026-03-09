@@ -43,11 +43,20 @@ export function HeroSection({
       )}
       containerClassName="flex flex-col items-center text-center"
     >
-      <motion.p
+      <motion.h2
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground md:text-sm"
+        className="text-2xl font-semibold text-foreground md:text-3xl"
+      >
+        Salut, moi c'est{" "}
+        <span className="text-primary">Iza</span> 👋
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground md:text-sm"
       >
         {subline}
       </motion.p>
@@ -61,7 +70,7 @@ export function HeroSection({
       <motion.p
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.5, delay: 0.25 }}
         className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
       >
         {description}
