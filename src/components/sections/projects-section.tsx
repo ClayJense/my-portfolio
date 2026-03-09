@@ -1,56 +1,96 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { motion } from "motion/react"
+import { ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import { SectionWrapper } from "@/components/layout"
+import { projectStackIcons } from "@/data/tech-icons"
+
+export interface ProjectTechIcon {
+  url: string
+  name: string
+}
 
 export interface Project {
   title: string
   description: string
   tags?: string[]
+  /** Image de couverture ou poster si vidéo */
   image?: string
-  techIcons?: string[]
+  /** URL d'une vidéo (MP4) : lecture auto muette dans la carte */
+  video?: string
+  techIcons?: ProjectTechIcon[]
+  /** Lien vers le site ou la démo du projet */
+  href?: string
+  /** Afficher le site en direct dans un cadre (iframe) sur mobile et desktop */
+  embedSite?: boolean
 }
 
 const defaultProjects: Project[] = [
   {
-    title: "Application e-commerce",
+    title: "Université Dakar-Bourguiba (UDB)",
     description:
-      "Plateforme de vente en ligne avec panier, paiement et tableau de bord admin.",
-    tags: ["Next.js", "TypeScript", "Stripe"],
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
-    techIcons: ["nextdotjs", "typescript", "stripe"],
+      "Projet réalisé lors d'un stage de 4 mois avec une équipe de 4 étudiants : site et applications pour l'université. Back-end Laravel, front-end Angular, base MySQL, hébergement OVH.",
+    tags: ["Laravel", "Angular", "MySQL", "OVH"],
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80",
+    techIcons: [
+      { url: projectStackIcons.Laravel, name: "Laravel" },
+      { url: projectStackIcons.Angular, name: "Angular" },
+      { url: projectStackIcons.MySQL, name: "MySQL" },
+      { url: projectStackIcons.Git, name: "Git" },
+      { url: projectStackIcons.GitHub, name: "GitHub" },
+      { url: projectStackIcons.OVH, name: "OVH" },
+    ],
+    href: "https://udb.sn/",
+    embedSite: true,
   },
   {
-    title: "Dashboard analytics",
+    title: "BIACode",
     description:
-      "Tableau de bord temps réel pour visualisation de métriques et rapports.",
-    tags: ["React", "API", "Data viz"],
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
-    techIcons: ["react", "nodedotjs", "postgresql"],
+      "Notre plateforme et agence, lancée à trois juste après la licence (L3). Créée à la suite du stage à l'UDB, BIACode est notre structure dédiée au développement et à l'accompagnement des projets numériques.",
+    tags: ["Agence", "Plateforme"],
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+    techIcons: [
+      { url: projectStackIcons.Laravel, name: "Laravel" },
+      { url: projectStackIcons.Angular, name: "Angular" },
+      { url: projectStackIcons.MySQL, name: "MySQL" },
+      { url: projectStackIcons.Git, name: "Git" },
+      { url: projectStackIcons.GitHub, name: "GitHub" },
+      { url: projectStackIcons.LWS, name: "LWS" },
+    ],
+    href: "https://www.biacode.tech/",
+    embedSite: true,
   },
   {
-    title: "Site vitrine & blog",
+    title: "EASYTECS — EasyGEC",
     description:
-      "Site institutionnel avec blog, formulaire de contact et intégration CMS headless.",
-    tags: ["Next.js", "CMS", "SEO"],
-    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80",
-    techIcons: ["nextdotjs", "tailwindcss", "vercel"],
+      "Premier client de l'agence : plateforme pour EASYTECS, structure sénégalaise spécialisée dans les logiciels métiers. EasyGEC est un système d'enregistrement sécurisé et simple pour gérer les faits d'état civil (naissance au décès), garantissant les droits fondamentaux : carte d'identité, droit de vote, héritage, accès à l'école, permis de conduire, etc.",
+    tags: ["État civil", "e-Gouvernance", "Sénégal"],
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80",
+    techIcons: [
+      { url: projectStackIcons.Laravel, name: "Laravel" },
+      { url: projectStackIcons.Angular, name: "Angular" },
+      { url: projectStackIcons.MySQL, name: "MySQL" },
+      { url: projectStackIcons.Git, name: "Git" },
+      { url: projectStackIcons.GitHub, name: "GitHub" },
+      { url: projectStackIcons.LWS, name: "LWS" },
+    ],
+    href: "https://www.easytecs.tech/",
+    embedSite: true,
   },
 ]
 
-function TechIcon({ slug }: { slug: string }) {
-  const src = `https://cdn.simpleicons.org/${slug}`
-  const name = slug.replace("dotjs", ".js").replace("dot", " ")
+function TechIcon({ url, name }: ProjectTechIcon) {
   return (
     <span
       className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted p-1.5"
       title={name}
     >
       <Image
-        src={src}
+        src={url}
         alt=""
         width={20}
         height={20}
@@ -58,6 +98,38 @@ function TechIcon({ slug }: { slug: string }) {
         unoptimized
       />
     </span>
+  )
+}
+
+/** Cadre type navigateur avec iframe : site en direct, mobile et desktop. Cadre plus grand pour bien voir l'interface. */
+function BrowserPreview({ url, title }: { url: string; title: string }) {
+  const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "")
+  return (
+    <div className="flex flex-col overflow-hidden rounded-t-xl border-b border-border bg-muted/50">
+      <div className="flex items-center gap-2 border-b border-border bg-card px-2 py-1.5 sm:px-3 sm:py-2">
+        <div className="flex gap-1 sm:gap-1.5 shrink-0">
+          <span className="size-2 rounded-full bg-[#ff5f57] sm:size-2.5" aria-hidden />
+          <span className="size-2 rounded-full bg-[#febc2e] sm:size-2.5" aria-hidden />
+          <span className="size-2 rounded-full bg-[#28c840] sm:size-2.5" aria-hidden />
+        </div>
+        <div className="min-w-0 flex-1 rounded-md border border-border bg-muted/80 px-2 py-1">
+          <span className="truncate text-[10px] sm:text-xs text-muted-foreground">
+            {displayUrl}
+          </span>
+        </div>
+      </div>
+      {/* Cadre plus haut (4/3) pour mieux voir le site, surtout sur mobile */}
+      <div className="relative w-full bg-muted" style={{ aspectRatio: "4/3" }}>
+        <iframe
+          src={url}
+          title={`Aperçu : ${title}`}
+          className="absolute inset-0 h-full w-full border-0"
+          loading="lazy"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+          referrerPolicy="no-referrer"
+        />
+      </div>
+    </div>
   )
 }
 
@@ -88,6 +160,7 @@ export function ProjectsSection({
         </h2>
         <p className="mt-2 text-sm text-muted-foreground sm:text-base">{subtitle}</p>
       </div>
+      {/* Grille : 1 col mobile pour cadres plus larges, 2–3 cols desktop */}
       <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <motion.li
@@ -97,43 +170,73 @@ export function ProjectsSection({
             viewport={{ once: true, margin: "-30px" }}
             transition={{ duration: 0.4 }}
           >
-            <div className="group flex h-full flex-col rounded-xl border border-border bg-card p-4 sm:p-6 text-card-foreground shadow-sm transition-all hover:border-primary/30 hover:shadow-md">
-              {project.image && (
-                <div className="relative -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 mb-4 aspect-video overflow-hidden rounded-t-xl">
-                  <Image
-                    src={project.image}
-                    alt=""
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
+            <div className="group flex h-full flex-col rounded-xl border border-border bg-card overflow-hidden text-card-foreground shadow-sm transition-all hover:border-primary/30 hover:shadow-md">
+              {(project.video || (project.embedSite && project.href) || project.image) && (
+                <div className="-mx-4 -mt-4 sm:-mx-6 sm:-mt-6 mb-4 overflow-hidden rounded-t-xl">
+                  {project.video ? (
+                    <div className="relative aspect-video overflow-hidden bg-muted">
+                      <video
+                        src={project.video}
+                        poster={project.image}
+                        muted
+                        loop
+                        playsInline
+                        autoPlay
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        aria-label={`Aperçu vidéo de ${project.title}`}
+                      />
+                    </div>
+                  ) : project.embedSite && project.href ? (
+                    <BrowserPreview url={project.href} title={project.title} />
+                  ) : project.image ? (
+                    <div className="relative aspect-video overflow-hidden bg-muted">
+                      <Image
+                        src={project.image}
+                        alt=""
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
+                  ) : null}
                 </div>
               )}
-              <h3 className="font-semibold text-foreground">
-                {project.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
-                {project.description}
-              </p>
-              {project.techIcons && project.techIcons.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {project.techIcons.map((slug) => (
-                    <TechIcon key={slug} slug={slug} />
-                  ))}
-                </div>
-              )}
-              {project.tags && project.tags.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+              <div className="flex flex-1 flex-col p-4 sm:p-6">
+                <h3 className="font-semibold text-foreground">{project.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                  {project.description}
+                </p>
+                {project.techIcons && project.techIcons.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.techIcons.map((icon) => (
+                      <TechIcon key={icon.name} url={icon.url} name={icon.name} />
+                    ))}
+                  </div>
+                )}
+                {project.tags && project.tags.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {project.href && (
+                  <Link
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  >
+                    Voir le site
+                    <ExternalLink className="size-4 shrink-0" aria-hidden />
+                  </Link>
+                )}
+              </div>
             </div>
           </motion.li>
         ))}

@@ -4,4 +4,4 @@ export {
   CertificationsSection,
   type Certification,
 } from "./certifications-section"
-export { ProjectsSection, type Project } from "./projects-section"
+export { ProjectsSection, type Project, type ProjectTechIcon } from "./projects-section"

@@ -84,3 +84,14 @@ export const techCategories: TechCategory[] = [
     ],
   },
 ]
+
+/** Icônes pour la section Projets (mêmes URLs que la stack technique) */
+export const projectStackIcons = {
+  Angular: "https://cdn.simpleicons.org/angular/DD0031",
+  Laravel: "https://cdn.simpleicons.org/laravel/FF2D20",
+  MySQL: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+  OVH: "https://cdn.simpleicons.org/ovh/123F6D",
+  LWS: "https://lws.info/wp-content/uploads/2025/01/cropped-LWS-fr.png",
+  Git: "https://cdn.simpleicons.org/git/F05032",
+  GitHub: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+} as const
