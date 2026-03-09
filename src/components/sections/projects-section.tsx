@@ -79,14 +79,14 @@ export function ProjectsSection({
       id={siteConfig.sections.projects}
       className={cn("bg-muted/30", className)}
     >
-      <div className="mb-12 max-w-2xl">
+      <div className="mb-8 sm:mb-12 max-w-2xl">
         <h2
           id={`${siteConfig.sections.projects}-heading`}
-          className="text-3xl font-bold tracking-tight text-foreground md:text-4xl"
+          className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl"
         >
           {title}
         </h2>
-        <p className="mt-2 text-muted-foreground">{subtitle}</p>
+        <p className="mt-2 text-sm text-muted-foreground sm:text-base">{subtitle}</p>
       </div>
       <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
@@ -97,9 +97,9 @@ export function ProjectsSection({
             viewport={{ once: true, margin: "-30px" }}
             transition={{ duration: 0.4 }}
           >
-            <div className="group flex h-full flex-col rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm transition-all hover:border-primary/30 hover:shadow-md">
+            <div className="group flex h-full flex-col rounded-xl border border-border bg-card p-4 sm:p-6 text-card-foreground shadow-sm transition-all hover:border-primary/30 hover:shadow-md">
               {project.image && (
-                <div className="relative -mx-6 -mt-6 mb-4 aspect-video overflow-hidden rounded-t-xl">
+                <div className="relative -mx-4 -mt-4 sm:-mx-6 sm:-mt-6 mb-4 aspect-video overflow-hidden rounded-t-xl">
                   <Image
                     src={project.image}
                     alt=""

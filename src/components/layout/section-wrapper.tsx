@@ -16,12 +16,12 @@ export function SectionWrapper({
   return (
     <section
       id={id}
-      className={cn("py-20 md:py-28", className)}
+      className={cn("py-12 sm:py-20 md:py-28", className)}
       aria-labelledby={id ? `${id}-heading` : undefined}
     >
       <div
         className={cn(
-          "mx-auto max-w-6xl px-6",
+          "mx-auto max-w-6xl px-4 sm:px-6",
           containerClassName
         )}
       >

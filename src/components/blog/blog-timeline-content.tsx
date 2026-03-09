@@ -23,7 +23,7 @@ export function BlogTimelineContent({ post }: BlogTimelineContentProps) {
       <Link
         href={`/blog/${post.slug}`}
         className={cn(
-          "block rounded-xl border border-border bg-card p-6 shadow-sm transition-all",
+          "block rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm transition-all",
           "hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         )}
       >

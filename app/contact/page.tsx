@@ -10,7 +10,7 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <div className="min-h-screen pb-24">
-      <div className="mx-auto max-w-2xl px-6 py-16 md:py-24">
+      <div className="mx-auto max-w-2xl px-4 sm:px-6 py-12 sm:py-16 md:py-24">
         <Link
           href="/"
           className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -19,17 +19,17 @@ export default function ContactPage() {
           Retour à l'accueil
         </Link>
         <header className="mb-12">
-          <h1 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl">
             Contact
           </h1>
-          <p className="mt-3 text-lg text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground sm:text-lg">
             Un projet, une question ou une collaboration ? Envoyez-moi un message.
           </p>
         </header>
         <div className="space-y-10">
-          <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <section className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
             <h2 className="sr-only">Coordonnées</h2>
-            <ul className="flex flex-wrap gap-6">
+            <ul className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6">
               <li className="flex items-center gap-3 text-muted-foreground">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Mail className="size-5" />
@@ -61,7 +61,7 @@ export default function ContactPage() {
               </li>
             </ul>
           </section>
-          <section className="rounded-xl border border-border bg-card p-6 shadow-sm md:p-8">
+          <section className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6 md:p-8">
             <h2 className="text-lg font-semibold text-foreground mb-6">
               Formulaire de contact
             </h2>

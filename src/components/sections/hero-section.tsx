@@ -38,7 +38,7 @@ export function HeroSection({
     <SectionWrapper
       id={siteConfig.sections.hero}
       className={cn(
-        "flex min-h-[85vh] flex-col justify-center border-b border-border/40",
+        "flex min-h-[85vh] sm:min-h-[90vh] flex-col justify-center border-b border-border/40",
         className
       )}
       containerClassName="flex flex-col items-center text-center"
@@ -47,7 +47,7 @@ export function HeroSection({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="text-2xl font-semibold text-foreground md:text-3xl"
+        className="text-xl font-semibold text-foreground sm:text-2xl md:text-3xl"
       >
         Salut, moi c'est{" "}
         <span className="text-primary">Iza</span> 👋
@@ -71,7 +71,7 @@ export function HeroSection({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25 }}
-        className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl"
+        className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-lg md:text-xl px-2 sm:px-0"
       >
         {description}
       </motion.p>

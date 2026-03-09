@@ -36,7 +36,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen pb-24">
-      <article className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+      <article className="mx-auto max-w-3xl px-4 sm:px-6 py-12 sm:py-16 md:py-24">
         <Link
           href="/blog"
           className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
@@ -57,7 +57,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               />
             </div>
           )}
-          <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             {post.title}
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">

@@ -30,7 +30,7 @@ export function AboutSection({
       className={cn("bg-muted/30", className)}
     >
       {/* Haut : nuage + texte */}
-      <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 lg:items-center">
+      <div className="grid gap-8 sm:gap-12 lg:grid-cols-12 lg:gap-16 lg:items-center">
         <motion.div
           className="lg:col-span-5 flex justify-center lg:justify-end"
           initial={{ opacity: 0, scale: 0.98 }}
@@ -50,7 +50,7 @@ export function AboutSection({
         >
           <h2
             id={`${siteConfig.sections.about}-heading`}
-            className="text-3xl font-bold tracking-tight text-foreground md:text-4xl"
+            className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl"
           >
             {title}
           </h2>
@@ -76,16 +76,16 @@ export function AboutSection({
 
       {/* Bas : grille complète de technos par catégorie */}
       <motion.div
-        className="mt-16"
+        className="mt-10 sm:mt-16"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.5 }}
       >
-        <h3 className="mb-8 text-xl font-bold tracking-tight text-foreground md:text-2xl">
+        <h3 className="mb-6 sm:mb-8 text-lg font-bold tracking-tight text-foreground sm:text-xl md:text-2xl">
           Stack technique
         </h3>
-        <div className="grid gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid gap-6 sm:gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {techCategories.map((cat) => (
             <div key={cat.label}>
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
