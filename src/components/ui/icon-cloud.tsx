@@ -305,17 +305,19 @@ export function IconCloud({ icons, images }: IconCloudProps) {
   }, [icons, images, iconPositions, isDragging, mousePos, targetRotation])
 
   return (
-    <canvas
-      ref={canvasRef}
-      width={400}
-      height={400}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      className="rounded-lg"
-      aria-label="Interactive 3D Icon Cloud"
-      role="img"
-    />
+    <div className="w-full max-w-[260px] sm:max-w-[320px] lg:max-w-[400px] aspect-square mx-auto">
+      <canvas
+        ref={canvasRef}
+        width={400}
+        height={400}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        className="w-full h-full rounded-lg"
+        aria-label="Interactive 3D Icon Cloud"
+        role="img"
+      />
+    </div>
   )
 }
