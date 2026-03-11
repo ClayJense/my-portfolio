@@ -39,10 +39,10 @@ export default function ContactPage() {
                     Email
                   </span>
                   <a
-                    href="mailto:contact@example.com"
+                    href="mailto:izayidali@biacode.tech"
                     className="text-sm hover:underline"
                   >
-                    contact@example.com
+                    izayidali@biacode.tech
                   </a>
                 </div>
               </li>
@@ -55,12 +55,12 @@ export default function ContactPage() {
                     WhatsApp
                   </span>
                   <a
-                    href="https://wa.me/33600000000"
+                    href="https://wa.me/221783723507"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm hover:underline"
                   >
-                    Me contacter sur WhatsApp
+                    +221 78 372 35 07
                   </a>
                 </div>
               </li>
