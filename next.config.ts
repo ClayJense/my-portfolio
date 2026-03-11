@@ -23,6 +23,16 @@ const nextConfig: NextConfig = {
         hostname: "lws.info",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "udb.sn",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.udb.sn",
+        pathname: "/**",
+      },
     ],
   },
 };
