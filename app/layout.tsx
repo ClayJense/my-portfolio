@@ -15,8 +15,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mon portfolio",
+  title: "Mon portfolio Izayid Ali",
   description: "Portfolio personnel",
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png", sizes: "32x32" },
+      { url: "/logo.png", type: "image/png", sizes: "192x192" },
+      { url: "/logo.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

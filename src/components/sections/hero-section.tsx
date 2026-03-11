@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { motion } from "motion/react"
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect"
@@ -30,7 +31,7 @@ export function HeroSection({
   className,
   words = defaultWords,
   subline = "Développeur full‑stack orienté backend & DevOps",
-  description = "Développeur full‑stack avec quelques années d'expérience, je travaille surtout sur le backend (Laravel, Spring Boot, Nest.js) tout en construisant des interfaces modernes avec Angular et Next.js. J'explore aussi la partie DevOps : Linux, Docker et déploiements sur le cloud.",
+  description = "Développeur Full-Stack passionné, je conçois des applications web robustes et scalables. Spécialisé en Backend (Nest.js, Laravel, Spring Boot), j'accorde une importance particulière à l'architecture logicielle tout en créant des interfaces modernes avec Next.js et Angular. Mon approche inclut une dimension DevOps (Docker, Linux, Cloud) pour garantir des déploiements fluides et performants.",
   ctaLabel = "Voir mes projets",
   ctaHref = `#${siteConfig.sections.projects}`,
 }: HeroSectionProps) {
@@ -43,24 +44,44 @@ export function HeroSection({
       )}
       containerClassName="flex flex-col items-center text-center"
     >
-      <motion.h2
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-xl font-semibold text-foreground sm:text-2xl md:text-3xl"
-      >
-        Salut, moi c'est{" "}
-        <span className="text-primary">Iza</span> 👋
-      </motion.h2>
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground md:text-sm"
-      >
-        {subline}
-      </motion.p>
-      <div className="mt-6 flex flex-col items-center justify-center">
+      {/* Logo à gauche, titre + sous-titre à droite */}
+      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 w-full max-w-4xl mb-8">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="shrink-0"
+        >
+          <Image
+            src="/logo.png"
+            alt="Iza"
+            width={256}
+            height={256}
+            className="size-24 sm:size-32 md:size-40 rounded-2xl object-contain"
+            priority
+          />
+        </motion.div>
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left min-w-0">
+          <motion.h2
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-xl font-semibold text-foreground sm:text-2xl md:text-3xl"
+          >
+            Salut, moi c&apos;est{" "}
+            <span className="text-primary">Iza</span> 👋
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mt-1 sm:mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground md:text-sm"
+          >
+            {subline}
+          </motion.p>
+        </div>
+      </div>
+      <div className="mt-2 flex flex-col items-center justify-center">
         <TypewriterEffectSmooth
           words={words}
           className="text-foreground"
