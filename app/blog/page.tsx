@@ -17,7 +17,10 @@ function formatTimelineDate(dateStr: string): string {
 }
 
 export default function BlogPage() {
-  const timelineData = blogPosts.map((post) => ({
+  const sortedPosts = [...blogPosts].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+  const timelineData = sortedPosts.map((post) => ({
     id: post.slug,
     title: formatTimelineDate(post.date),
     content: <BlogTimelineContent key={post.slug} post={post} />,

@@ -91,7 +91,7 @@ const defaultCertifications: Certification[] = [
   {
     name: "Licence 3 en Génie Logiciel",
     issuer: "Université Dakar-Bourguiba",
-    date: "2024",
+    date: "2025",
     url: "https://www.udb.sn/",
     logo: "https://udb.sn/assets/logo-favicone.png",
     description:
@@ -100,7 +100,7 @@ const defaultCertifications: Certification[] = [
   {
     name: "Certificat de stage",
     issuer: "Université Dakar-Bourguiba",
-    date: "2024",
+    date: "2025",
     url: "https://www.udb.sn/",
     logo: "https://udb.sn/assets/logo-favicone.png",
     description:
