@@ -87,6 +87,25 @@ const defaultProjects: Project[] = [
     href: "https://www.easytecs.tech/",
     embedSite: true,
   },
+  {
+    title: "Nora — Assistant IA",
+    description:
+      "Assistant IA conversationnel : interface web minimaliste pour poser des questions et recevoir des réponses naturelles. Front HTML/CSS/JavaScript, backend Python Flask, déployé sur Render.",
+    date: "Janvier 2024",
+    tags: ["IA", "Chatbot", "Flask"],
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+    techIcons: [
+      { url: projectStackIcons.HTML, name: "HTML" },
+      { url: projectStackIcons.CSS, name: "CSS" },
+      { url: projectStackIcons.JavaScript, name: "JavaScript" },
+      { url: projectStackIcons.Python, name: "Python" },
+      { url: projectStackIcons.Flask, name: "Flask" },
+      { url: projectStackIcons.Git, name: "Git" },
+      { url: projectStackIcons.GitHub, name: "GitHub" },
+    ],
+    href: "https://noraia.onrender.com/",
+    embedSite: true,
+  },
 ]
 
 function TechIcon({ url, name }: ProjectTechIcon) {

@@ -26,7 +26,7 @@ export function Chatbot() {
 
   const toggle = useCallback(() => setIsOpen((prev) => !prev), [])
 
-  const sendMessage = useCallback(() => {
+  const sendMessage = useCallback(async () => {
     const text = input.trim()
     if (!text || isTyping) return
 
@@ -41,18 +41,35 @@ export function Chatbot() {
     setInput("")
     setIsTyping(true)
 
-    const delay = 800 + Math.random() * 1200
-    setTimeout(() => {
-      const response = SIMULATED_RESPONSES[Math.floor(Math.random() * SIMULATED_RESPONSES.length)]
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      })
+      const data = await res.json().catch(() => ({}))
+      const reply =
+        res.ok && typeof data?.reply === "string"
+          ? data.reply
+          : SIMULATED_RESPONSES[Math.floor(Math.random() * SIMULATED_RESPONSES.length)]
       const botMsg: ChatMessage = {
         id: generateId(),
         role: "assistant",
-        content: response,
+        content: reply,
         timestamp: new Date(),
       }
       setMessages((prev) => [...prev, botMsg])
+    } catch {
+      const botMsg: ChatMessage = {
+        id: generateId(),
+        role: "assistant",
+        content: SIMULATED_RESPONSES[0],
+        timestamp: new Date(),
+      }
+      setMessages((prev) => [...prev, botMsg])
+    } finally {
       setIsTyping(false)
-    }, delay)
+    }
   }, [input, isTyping])
 
   return (

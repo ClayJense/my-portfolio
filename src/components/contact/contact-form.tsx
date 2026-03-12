@@ -67,9 +67,28 @@ export function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus("sending")
-    await new Promise((r) => setTimeout(r, 800))
-    setStatus("success")
-    setForm(initialForm)
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone || undefined,
+          message: form.message || undefined,
+          countryCode: form.countryCode || undefined,
+        }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setStatus("error")
+        return
+      }
+      setStatus("success")
+      setForm(initialForm)
+    } catch {
+      setStatus("error")
+    }
   }
 
   const selectedCountry = countryPhoneOptions.find((c) => c.code === form.countryCode)
