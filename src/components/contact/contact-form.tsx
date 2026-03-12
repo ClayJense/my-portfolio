@@ -4,6 +4,7 @@ import { useState, useMemo, useRef, useEffect } from "react"
 import { motion } from "motion/react"
 import { Send, Search } from "lucide-react"
 import { countryPhoneOptions, getFlagEmoji, getPhonePlaceholder } from "@/data/countries"
+import { ContactConfirmationModal } from "./contact-confirmation-modal"
 import type { ContactFormData } from "@/types"
 import { cn } from "@/lib/utils"
 import {
@@ -79,7 +80,7 @@ export function ContactForm() {
           countryCode: form.countryCode || undefined,
         }),
       })
-      const data = await res.json().catch(() => ({}))
+      await res.json().catch(() => ({}))
       if (!res.ok) {
         setStatus("error")
         return
@@ -91,9 +92,16 @@ export function ContactForm() {
     }
   }
 
+  const closeConfirmation = () => setStatus("idle")
+
   const selectedCountry = countryPhoneOptions.find((c) => c.code === form.countryCode)
 
   return (
+    <>
+      <ContactConfirmationModal
+        open={status === "success"}
+        onClose={closeConfirmation}
+      />
     <motion.form
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -311,5 +319,6 @@ export function ContactForm() {
         </p>
       )}
     </motion.form>
+    </>
   )
 }

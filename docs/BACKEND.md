@@ -51,8 +51,8 @@ Tu peux activer Row Level Security (RLS) et une policy qui autorise l’insert u
 
 ## 4. Mailtrap
 
-- L’envoi utilise l’API Mailtrap **Send** (`https://send.api.mailtrap.io/api/send`).
-- Vérifie que le domaine / l’email expéditeur est bien configuré dans Mailtrap (Sending Domains).
+- L’envoi utilise l’API Mailtrap **Send** (API) ou SMTP : si `MAILTRAP_SMTP_HOST`, `_PORT`, `_USER`, `_PASS` sont définis, SMTP est utilisé (sandbox = tests ; live = `live.smtp.mailtrap.io`, user `api`).
+- Sandbox SMTP = tests (Inbox Mailtrap). Live = livraison réelle ; vérifie le domaine / l’email expéditeur est bien configuré dans Mailtrap (Sending Domains). Pour SMTP en prod : `live.smtp.mailtrap.io`, user `api`, pass = API token.
 
 ## 5. Chatbot
 
