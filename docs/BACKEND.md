@@ -1,5 +1,19 @@
 # Backend — Contact & Chatbot
 
+## 0. Installation (obligatoire pour le build)
+
+Installe les dépendances pour que le build trouve `@supabase/supabase-js` :
+
+```bash
+npm install
+# ou
+pnpm install
+```
+
+Sans ça : `Module not found: Can't resolve '@supabase/supabase-js'`.
+
+---
+
 ## 1. Variables d'environnement
 
 Copie `.env.example` en `.env.local` à la racine du projet et remplis les valeurs.
@@ -9,7 +23,7 @@ cp .env.example .env.local
 ```
 
 - **Supabase** : Dashboard → Settings → API (URL + anon key + service_role key).
-- **Mailtrap** : Settings → API Tokens → Generate. Pour l’envoi d’emails (formulaire de contact).
+- **MAILTRAP_API_TOKEN** : https://mailtrap.io → Settings → API Tokens → Generate Token. Tu reçois les mails dans ton webmail LWS ; pas besoin de SMTP LWS. Pour l’envoi d’emails (formulaire de contact).
 - **CONTACT_TO_EMAIL** : adresse qui reçoit les messages du formulaire (ex. `izayidali@biacode.tech`).
 
 ## 2. Supabase — Table contact
