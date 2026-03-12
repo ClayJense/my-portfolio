@@ -47,14 +47,14 @@ Tu peux activer Row Level Security (RLS) et une policy qui autorise l’insert u
 | Route           | Méthode | Rôle |
 |----------------|--------|------|
 | `/api/contact` | POST   | Enregistre le message (Supabase) + envoi email (Mailtrap) |
-| `/api/chat`    | POST   | Réponse du chatbot (simulée ; tu peux brancher une API IA plus tard) |
+| `/api/chat`    | POST   | Réponse du chatbot (Mistral) |
 
 ## 4. Mailtrap
 
 - L’envoi utilise l’API Mailtrap **Send** (API) ou SMTP : si `MAILTRAP_SMTP_HOST`, `_PORT`, `_USER`, `_PASS` sont définis, SMTP est utilisé (sandbox = tests ; live = `live.smtp.mailtrap.io`, user `api`).
 - Sandbox SMTP = tests (Inbox Mailtrap). Live = livraison réelle ; vérifie le domaine / l’email expéditeur est bien configuré dans Mailtrap (Sending Domains). Pour SMTP en prod : `live.smtp.mailtrap.io`, user `api`, pass = API token.
 
-## 5. Chatbot
+## 5. Chatbot (Mistral)
 
-- Pour l’instant, `/api/chat` renvoie une réponse parmi une liste fixe.
-- Pour un vrai bot IA : ajoute dans `.env.local` une clé (ex. `OPENAI_API_KEY`) et modifie `app/api/chat/route.ts` pour appeler l’API choisie.
+- Pour l’instant, `/api/chat` utilise Mistral. Prompt dans `src/lib/chatbot-prompt.ts`. Voir `MISTRAL_API_KEY`, `MISTRAL_API_URL`, `MISTRAL_MODEL` dans `.env.example`.
+- Pour un vrai bot IA : ajoute dans `.env.local` une clé (ex. `MISTRAL_API_KEY`) et modifie `app/api/chat/route.ts` pour appeler l’API choisie.

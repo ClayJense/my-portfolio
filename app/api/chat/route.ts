@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server"
+import { CHATBOT_SYSTEM_PROMPT } from "@/lib/chatbot-prompt"
 
 /**
  * POST /api/chat
- * Reçoit le message utilisateur et renvoie une réponse (simulée ou via une API IA plus tard).
+ * Reçoit le message utilisateur et renvoie une réponse via l'API Mistral.
  * Body: { message: string }
  * Réponse: { reply: string }
  */
@@ -18,15 +19,50 @@ export async function POST(request: Request) {
       )
     }
 
-    // Pour l’instant : réponses simulées. Plus tard tu peux brancher OpenAI, etc.
-    const replies = [
-      "Merci pour ta question ! Iza est un développeur full-stack orienté backend & DevOps, passionné par Laravel, Spring Boot, Nest.js, Angular et Next.js.",
-      "Iza travaille principalement avec Laravel, Spring Boot et Nest.js côté backend, et Angular/Next.js côté frontend. Il maîtrise aussi Docker, Linux et le déploiement cloud.",
-      "N'hésite pas à consulter la section projets du portfolio pour voir des exemples concrets de réalisations !",
-      "Tu peux contacter Iza via la page Contact du site (email, WhatsApp).",
-      "Iza est aussi à l'aise avec les bases de données relationnelles : PostgreSQL, MySQL, Oracle, SQL Server et SQLite.",
-    ]
-    const reply = replies[Math.floor(Math.random() * replies.length)]
+    const apiKey = process.env.MISTRAL_API_KEY
+    const apiUrl =
+      process.env.MISTRAL_API_URL ?? "https://api.mistral.ai/v1/chat/completions"
+    const model = process.env.MISTRAL_MODEL ?? "mistral-small-latest"
+
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "Chatbot non configuré (MISTRAL_API_KEY manquante)." },
+        { status: 503 }
+      )
+    }
+
+    const res = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: CHATBOT_SYSTEM_PROMPT },
+          { role: "user", content: message },
+        ],
+        max_tokens: 512,
+        temperature: 0.4,
+      }),
+    })
+
+    if (!res.ok) {
+      const errText = await res.text()
+      console.error("[api/chat] Mistral error:", res.status, errText)
+      return NextResponse.json(
+        { error: "Le service de chat est temporairement indisponible." },
+        { status: 502 }
+      )
+    }
+
+    const data = (await res.json()) as {
+      choices?: Array<{ message?: { content?: string } }>
+    }
+    const reply =
+      data?.choices?.[0]?.message?.content?.trim() ||
+      "Désolé, je n’ai pas pu générer une réponse. Tu peux me contacter via la page Contact du site."
 
     return NextResponse.json({ reply })
   } catch (e) {
