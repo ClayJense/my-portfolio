@@ -1,0 +1,143 @@
+"use client"
+
+import { motion, AnimatePresence } from "motion/react"
+import Image from "next/image"
+import { ExternalLink, X } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { BlogPostContent } from "@/components/blog/blog-post-content"
+import type { BlogPost } from "@/types"
+
+export interface ProjectDetailModalProps {
+  open: boolean
+  onClose: () => void
+  project: {
+    title: string
+    description: string
+    date?: string
+    tags?: string[]
+    image?: string
+    href?: string
+  }
+  post?: BlogPost
+}
+
+export function ProjectDetailModal({
+  open,
+  onClose,
+  project,
+  post,
+}: ProjectDetailModalProps) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="project-detail-title"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ scale: 0.98, opacity: 0, y: 8 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.98, opacity: 0, y: 8 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            onClick={(e) => e.stopPropagation()}
+            className={cn(
+              "w-full max-w-3xl overflow-hidden rounded-2xl border border-border bg-card shadow-xl"
+            )}
+          >
+            <div className="flex items-start justify-between gap-4 border-b border-border bg-muted/30 p-5">
+              <div className="min-w-0">
+                <h2
+                  id="project-detail-title"
+                  className="text-xl font-semibold text-foreground"
+                >
+                  {project.title}
+                </h2>
+                {project.date && (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {project.date}
+                  </p>
+                )}
+                {project.tags?.length ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {project.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              <button
+                type="button"
+                onClick={onClose}
+                className={cn(
+                  "rounded-lg border border-border bg-background/60 p-2 text-muted-foreground",
+                  "hover:bg-background hover:text-foreground transition-colors cursor-pointer"
+                )}
+                aria-label="Fermer"
+              >
+                <X className="size-4" aria-hidden />
+              </button>
+            </div>
+
+            <div className="max-h-[80vh] overflow-y-auto p-5">
+              {project.image && (
+                <div className="mb-5 overflow-hidden rounded-xl border border-border bg-muted">
+                  <div className="relative aspect-[16/7]">
+                    <Image
+                      src={project.image}
+                      alt=""
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                {project.description}
+              </p>
+
+              {post?.content ? (
+                <BlogPostContent content={post.content} />
+              ) : (
+                <div className="text-sm text-muted-foreground">
+                  Aucun contenu détaillé disponible pour ce projet pour le moment.
+                </div>
+              )}
+
+              {project.href ? (
+                <div className="mt-8">
+                  <a
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium",
+                      "text-foreground hover:bg-muted cursor-pointer"
+                    )}
+                  >
+                    Voir le site
+                    <ExternalLink className="size-4" aria-hidden />
+                  </a>
+                </div>
+              ) : null}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+

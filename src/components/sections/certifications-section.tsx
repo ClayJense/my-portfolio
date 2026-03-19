@@ -20,6 +20,8 @@ export interface Certification {
   description?: string
   /** Image du certificat (ex. attestation de stage) */
   image?: string
+  /** Optionnel : plusieurs images (ex. couverture + page 2, etc.) */
+  images?: string[]
 }
 
 interface CertificationsSectionProps {
@@ -30,6 +32,12 @@ interface CertificationsSectionProps {
 }
 
 function CertDetail({ cert }: { cert: Certification }) {
+  const media = cert.images?.length
+    ? cert.images
+    : cert.image
+      ? [cert.image]
+      : []
+
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
       {cert.logo && (
@@ -65,22 +73,46 @@ function CertDetail({ cert }: { cert: Certification }) {
           </div>
         )}
       </div>
-      {cert.image && (
+      {media.length > 0 && (
         <div className="sm:ml-auto shrink-0">
-          <a
-            href={cert.image}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block rounded-lg border border-border overflow-hidden hover:opacity-90 transition-opacity"
-          >
-            <Image
-              src={cert.image}
-              alt={`Certificat ${cert.name}`}
-              width={200}
-              height={140}
-              className="object-cover"
-            />
-          </a>
+          <div className="flex flex-col gap-3">
+            <a
+              href={media[0]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-lg border border-border overflow-hidden hover:opacity-90 transition-opacity bg-muted"
+            >
+              <Image
+                src={media[0]}
+                alt={`Certificat ${cert.name}`}
+                width={220}
+                height={160}
+                className="object-cover"
+              />
+            </a>
+
+            {media.length > 1 && (
+              <div className="flex flex-wrap gap-2 justify-end">
+                {media.slice(1).map((src, idx) => (
+                  <a
+                    key={src + idx}
+                    href={src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block rounded-lg border border-border overflow-hidden hover:opacity-90 transition-opacity bg-muted"
+                  >
+                    <Image
+                      src={src}
+                      alt={`Certificat ${cert.name} (image ${idx + 2})`}
+                      width={90}
+                      height={70}
+                      className="object-cover"
+                    />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import { SectionWrapper } from "@/components/layout"
 import { projectStackIcons } from "@/data/tech-icons"
+import { getPostBySlug } from "@/data/blog"
+import { ProjectDetailModal } from "./project-detail-modal"
 
 export interface ProjectTechIcon {
   url: string
@@ -20,6 +22,8 @@ export interface Project {
   description: string
   /** Mois et année uniquement, ex. "Juillet 2024" */
   date?: string
+  /** Slug du post détaillé dans `src/data/blog.ts` (quand disponible) */
+  slug?: string
   tags?: string[]
   /** Image de couverture ou poster si vidéo */
   image?: string
@@ -32,12 +36,25 @@ export interface Project {
   embedSite?: boolean
 }
 
+function getProjectBlogSlug(project: Project): string | null {
+  if (project.slug) return project.slug
+  const href = project.href ?? ""
+
+  if (href.includes("udb.sn")) return "udb"
+  if (href.includes("biacode.tech")) return "biacode"
+  if (href.includes("easytecs.tech") || href.includes("easytecs")) return "easytecs"
+  if (href.includes("noraia.onrender.com")) return "nora"
+
+  return null
+}
+
 const defaultProjects: Project[] = [
   {
     title: "Université Dakar-Bourguiba (UDB)",
     description:
       "Projet réalisé lors d'un stage de 4 mois avec une équipe de 4 étudiants : site et applications pour l'université. Back-end Laravel, front-end Angular, base MySQL, hébergement OVH.",
     date: "Juillet 2024",
+    slug: "udb",
     tags: ["Laravel", "Angular", "MySQL", "OVH"],
     image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80",
     techIcons: [
@@ -56,6 +73,7 @@ const defaultProjects: Project[] = [
     description:
       "Notre plateforme et agence tech, lancée à trois. BIACode est notre structure dédiée au développement et à l'accompagnement des projets numériques.",
     date: "Septembre 2024",
+    slug: "biacode",
     tags: ["Agence", "Plateforme"],
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
     techIcons: [
@@ -74,6 +92,7 @@ const defaultProjects: Project[] = [
     description:
       "Premier client de l'agence : plateforme pour EASYTECS, structure sénégalaise spécialisée dans les logiciels métiers. EasyGEC est un système d'enregistrement sécurisé et simple pour gérer les faits d'état civil (naissance au décès), garantissant les droits fondamentaux : carte d'identité, droit de vote, héritage, accès à l'école, permis de conduire, etc.",
     date: "Mars 2026",
+    slug: "easytecs",
     tags: ["État civil", "e-Gouvernance", "Sénégal"],
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80",
     techIcons: [
@@ -92,6 +111,7 @@ const defaultProjects: Project[] = [
     description:
       "Assistant IA conversationnel : interface web minimaliste pour poser des questions et recevoir des réponses naturelles. Front HTML/CSS/JavaScript, backend Python Flask, déployé sur Render.",
     date: "Janvier 2024",
+    slug: "nora",
     tags: ["IA", "Chatbot", "Flask"],
     image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
     techIcons: [
@@ -205,6 +225,11 @@ export function ProjectsSection({
   subtitle = "Réalisations récentes et side projects",
   projects = defaultProjects,
 }: ProjectsSectionProps) {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+
+  const selectedSlug = selectedProject ? getProjectBlogSlug(selectedProject) : null
+  const selectedPost = selectedSlug ? getPostBySlug(selectedSlug) : undefined
+
   return (
     <SectionWrapper
       id={siteConfig.sections.projects}
@@ -289,6 +314,21 @@ export function ProjectsSection({
                     ))}
                   </div>
                 )}
+
+                <div className="mt-4 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProject(project)}
+                    className={cn(
+                      "inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground",
+                      "hover:bg-muted transition-colors cursor-pointer",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    )}
+                  >
+                    Voir le détail
+                  </button>
+                </div>
+
                 {project.href && (
                   <Link
                     href={project.href}
@@ -305,6 +345,24 @@ export function ProjectsSection({
           </motion.li>
         ))}
       </ul>
+
+      <ProjectDetailModal
+        open={selectedProject !== null}
+        onClose={() => setSelectedProject(null)}
+        project={
+          selectedProject
+            ? {
+                title: selectedProject.title,
+                description: selectedProject.description,
+                date: selectedProject.date,
+                tags: selectedProject.tags,
+                image: selectedProject.image,
+                href: selectedProject.href,
+              }
+            : { title: "", description: "" }
+        }
+        post={selectedPost}
+      />
     </SectionWrapper>
   )
 }
