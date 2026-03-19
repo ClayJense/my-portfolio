@@ -315,31 +315,35 @@ export function ProjectsSection({
                   </div>
                 )}
 
-                <div className="mt-4 flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedProject(project)}
-                    className={cn(
-                      "inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground",
-                      "hover:bg-muted transition-colors cursor-pointer",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center">
+                    {project.href && (
+                      <Link
+                        href={project.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                      >
+                        Voir le site
+                        <ExternalLink className="size-4 shrink-0" aria-hidden />
+                      </Link>
                     )}
-                  >
-                    Voir le détail
-                  </button>
-                </div>
+                  </div>
 
-                {project.href && (
-                  <Link
-                    href={project.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                  >
-                    Voir le site
-                    <ExternalLink className="size-4 shrink-0" aria-hidden />
-                  </Link>
-                )}
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProject(project)}
+                      className={cn(
+                        "inline-flex items-center justify-center rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground",
+                        "hover:bg-muted transition-colors cursor-pointer",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      )}
+                    >
+                      Voir le détail
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </motion.li>
