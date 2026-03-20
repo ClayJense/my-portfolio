@@ -129,6 +129,7 @@ const defaultCertifications: Certification[] = [
     description:
       "Licence 3 en Génie Logiciel (GL) obtenue à l'Université Dakar-Bourguiba. Formation en développement logiciel, bases de données, architectures et projets en équipe.",
   },
+  
   {
     name: "Certificat de stage",
     issuer: "Université Dakar-Bourguiba",

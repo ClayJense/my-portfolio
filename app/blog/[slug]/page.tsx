@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import Image from "next/image"
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 import { getPostBySlug, getAllSlugs } from "@/data/blog"
 import { BlogPostContent } from "@/components/blog/blog-post-content"
@@ -45,18 +44,6 @@ export default async function BlogPostPage({ params }: PageProps) {
           Retour au blog
         </Link>
         <header className="mb-10">
-          {post.image && (
-            <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-xl bg-muted">
-              <Image
-                src={post.image}
-                alt=""
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 768px) 100vw, 672px"
-              />
-            </div>
-          )}
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
             {post.title}
           </h1>
@@ -81,7 +68,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             ))}
           </div>
         </header>
-        <BlogPostContent content={post.content} />
+        <BlogPostContent content={post.content} coverImage={post.image} />
       </article>
     </div>
   )
