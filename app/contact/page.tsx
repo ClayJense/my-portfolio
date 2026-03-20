@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, Mail, MessageCircle } from "lucide-react"
+import { ArrowLeft, FileDown, Mail, MessageCircle } from "lucide-react"
 import { ContactForm } from "@/components/contact/contact-form"
 
 export const metadata = {
@@ -27,6 +27,21 @@ export default function ContactPage() {
           </p>
         </header>
         <div className="space-y-10">
+          <Link
+            href="/cv"
+            className="flex items-center justify-between gap-4 rounded-xl border border-primary/25 bg-primary/5 p-4 shadow-sm transition-colors hover:bg-primary/10 sm:p-5"
+          >
+            <div>
+              <p className="text-sm font-semibold text-foreground">Curriculum vitae</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Consultez mon CV et exportez-le en PDF (impression).
+              </p>
+            </div>
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+              <FileDown className="size-4" aria-hidden />
+              Ouvrir
+            </span>
+          </Link>
           <section className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
             <h2 className="sr-only">Coordonnées</h2>
             <ul className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6">

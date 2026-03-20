@@ -1,0 +1,42 @@
+/* Styles impression / export PDF (A4) — utilisés uniquement sur /cv */
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #0a0a0a !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .cv-no-print {
+    display: none !important;
+  }
+
+  .cv-sheet {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .cv-sidebar {
+    background: #171717 !important;
+    color: #fafafa !important;
+  }
+
+  .cv-main {
+    background: #fff !important;
+  }
+
+  .cv-avoid-break {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
