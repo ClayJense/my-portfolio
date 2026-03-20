@@ -46,8 +46,11 @@ export default function ContactPage() {
             <h2 className="sr-only">Coordonnées</h2>
             <ul className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6">
               <li className="flex items-center gap-3 text-muted-foreground">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Mail className="size-5" />
+                <span
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md ring-2 ring-primary/25 [&_svg]:stroke-[2.25]"
+                  aria-hidden
+                >
+                  <Mail className="size-5 shrink-0 text-primary-foreground" aria-hidden />
                 </span>
                 <div>
                   <span className="block text-sm font-medium text-foreground">
@@ -62,8 +65,11 @@ export default function ContactPage() {
                 </div>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <MessageCircle className="size-5" />
+                <span
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md ring-2 ring-primary/25 [&_svg]:stroke-[2.25]"
+                  aria-hidden
+                >
+                  <MessageCircle className="size-5 shrink-0 text-primary-foreground" aria-hidden />
                 </span>
                 <div>
                   <span className="block text-sm font-medium text-foreground">

@@ -158,7 +158,8 @@ export function CvView() {
               )}
             >
               <div className="relative mx-auto w-full max-w-[200px]">
-                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-primary/40 to-zinc-600/40 blur-sm" />
+                {/* Couleurs fixes : ne pas utiliser text-primary / primary ici (en mode clair primary = noir → invisible sur fond sombre) */}
+                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-br from-white/25 to-zinc-600/40 blur-sm" />
                 <div className="relative overflow-hidden rounded-2xl border-2 border-white/20 shadow-xl">
                   <Image
                     src="/me.png"
@@ -189,7 +190,7 @@ export function CvView() {
                 </h2>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
-                    <Mail className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <Mail className="mt-0.5 size-4 shrink-0 text-zinc-100" strokeWidth={2.25} />
                     <a
                       href={`mailto:${CONTACT.email}`}
                       className="break-all text-zinc-200 underline-offset-2 hover:underline"
@@ -198,7 +199,7 @@ export function CvView() {
                     </a>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Phone className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <Phone className="mt-0.5 size-4 shrink-0 text-zinc-100" strokeWidth={2.25} />
                     <a
                       href={CONTACT.phoneHref}
                       className="text-zinc-200 underline-offset-2 hover:underline"
@@ -209,11 +210,11 @@ export function CvView() {
                     </a>
                   </li>
                   <li className="flex items-start gap-3">
-                    <MapPin className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <MapPin className="mt-0.5 size-4 shrink-0 text-zinc-100" strokeWidth={2.25} />
                     <span className="text-zinc-200">{CONTACT.location}</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Globe className="mt-0.5 size-4 shrink-0 text-primary" />
+                    <Globe className="mt-0.5 size-4 shrink-0 text-zinc-100" strokeWidth={2.25} />
                     <Link
                       href={CONTACT.portfolioHref}
                       className="text-zinc-200 underline-offset-2 hover:underline"
@@ -238,9 +239,9 @@ export function CvView() {
                         className="inline-flex items-center gap-2 text-zinc-200 transition-colors hover:text-white"
                       >
                         {s.icon ? (
-                          <s.icon className="size-4 shrink-0 text-primary" />
+                          <s.icon className="size-4 shrink-0 text-zinc-100" strokeWidth={2.25} />
                         ) : (
-                          <XIcon className="size-4 shrink-0 text-primary" />
+                          <XIcon className="size-4 shrink-0 text-zinc-100" />
                         )}
                         {s.label}
                       </a>
