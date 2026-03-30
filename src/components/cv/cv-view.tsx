@@ -1,10 +1,12 @@
 "use client"
 
+import { useState, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
   ArrowLeft,
   Download,
+  Loader2,
   Mail,
   Phone,
   MapPin,
@@ -14,6 +16,7 @@ import {
   ExternalLink,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { downloadCvAsPdf } from "@/lib/cv-pdf"
 
 const CONTACT = {
   email: "izayidali@biacode.tech",
@@ -106,7 +109,34 @@ const PROJECTS = [
 ] as const
 
 export function CvView() {
-  const handlePrint = () => window.print()
+  const [pdfLoading, setPdfLoading] = useState(false)
+  const [pdfError, setPdfError] = useState<string | null>(null)
+
+  const handleDownloadPdf = useCallback(async () => {
+    const el = document.getElementById("cv-root")
+    if (!el || !(el instanceof HTMLElement)) {
+      setPdfError("Impossible de trouver le CV sur la page.")
+      return
+    }
+    setPdfError(null)
+    setPdfLoading(true)
+    try {
+      await downloadCvAsPdf(el)
+    } catch (err) {
+      console.error("[cv-pdf]", err)
+      const hint =
+        err instanceof Error && err.message
+          ? err.message
+          : typeof err === "string"
+            ? err
+            : "Erreur inconnue"
+      setPdfError(
+        `PDF : ${hint.slice(0, 200)}${hint.length > 200 ? "…" : ""} — Vérifie la console (F12) pour le détail.`
+      )
+    } finally {
+      setPdfLoading(false)
+    }
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-muted/60 via-background to-background pb-32 pt-6 sm:pt-10">
@@ -123,22 +153,38 @@ export function CvView() {
           <ArrowLeft className="size-4" />
           Retour au portfolio
         </Link>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           <button
             type="button"
-            onClick={handlePrint}
+            onClick={handleDownloadPdf}
+            disabled={pdfLoading}
             className={cn(
               "inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md",
               "hover:opacity-90 transition-opacity cursor-pointer",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+              "disabled:pointer-events-none disabled:opacity-60"
             )}
           >
-            <Download className="size-4" aria-hidden />
-            Télécharger en PDF
+            {pdfLoading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+                Génération du PDF…
+              </>
+            ) : (
+              <>
+                <Download className="size-4" aria-hidden />
+                Télécharger le CV (PDF)
+              </>
+            )}
           </button>
-          <p className="w-full text-xs text-muted-foreground sm:w-auto sm:self-center">
-            Utilise « Enregistrer au format PDF » dans la fenêtre d’impression.
+          <p className="text-xs text-muted-foreground sm:max-w-xs">
+            Uniquement la feuille de CV est exportée (pas la navbar ni cette barre).
           </p>
+          {pdfError && (
+            <p className="w-full text-sm text-destructive" role="alert">
+              {pdfError}
+            </p>
+          )}
         </div>
       </div>
 
