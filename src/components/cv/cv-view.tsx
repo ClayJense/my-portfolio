@@ -29,7 +29,7 @@ const CONTACT = {
 
 const SOCIAL = [
   { label: "GitHub", href: "https://github.com/ClayJense", icon: Github },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/izayid-ali", icon: Linkedin },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/ali-izayid/", icon: Linkedin },
   { label: "X", href: "https://x.com/Izayid04", icon: null as null },
 ] as const
 

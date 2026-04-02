@@ -27,7 +27,7 @@ const pageLinks = [
 
 const socialLinks = [
   { href: "https://github.com/ClayJense", label: "GitHub", icon: Github },
-  { href: "https://www.linkedin.com/in/izayid-ali", label: "LinkedIn", icon: Linkedin },
+  { href: "https://www.linkedin.com/in/ali-izayid/", label: "LinkedIn", icon: Linkedin },
   {
     href: "https://x.com/Izayid04",
     label: "X",
