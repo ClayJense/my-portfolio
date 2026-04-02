@@ -4,6 +4,11 @@ import { useState, useMemo, useRef, useEffect } from "react"
 import { motion } from "motion/react"
 import { Send, Search } from "lucide-react"
 import { countryPhoneOptions, getFlagEmoji, getPhonePlaceholder } from "@/data/countries"
+import {
+  RecaptchaV2,
+  isRecaptchaEnabled,
+  type RecaptchaV2Handle,
+} from "@/components/contact/recaptcha-v2"
 import { ContactConfirmationModal } from "./contact-confirmation-modal"
 import type { ContactFormData } from "@/types"
 import { cn } from "@/lib/utils"
@@ -37,9 +42,13 @@ function filterCountries(query: string) {
 export function ContactForm() {
   const [form, setForm] = useState<ContactFormData>(initialForm)
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle")
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+  const [captchaHint, setCaptchaHint] = useState(false)
   const [countrySearch, setCountrySearch] = useState("")
   const [selectOpen, setSelectOpen] = useState(false)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const recaptchaRef = useRef<RecaptchaV2Handle>(null)
+  const captchaEnabled = isRecaptchaEnabled()
 
   const phonePlaceholder = getPhonePlaceholder(form.countryCode)
   const filteredCountries = useMemo(
@@ -67,6 +76,11 @@ export function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (captchaEnabled && !recaptchaToken) {
+      setCaptchaHint(true)
+      return
+    }
+    setCaptchaHint(false)
     setStatus("sending")
     try {
       const res = await fetch("/api/contact", {
@@ -78,17 +92,22 @@ export function ContactForm() {
           phone: form.phone || undefined,
           message: form.message || undefined,
           countryCode: form.countryCode || undefined,
+          recaptchaToken: recaptchaToken || undefined,
         }),
       })
       await res.json().catch(() => ({}))
       if (!res.ok) {
         setStatus("error")
+        recaptchaRef.current?.reset()
         return
       }
       setStatus("success")
       setForm(initialForm)
+      recaptchaRef.current?.reset()
+      setRecaptchaToken(null)
     } catch {
       setStatus("error")
+      recaptchaRef.current?.reset()
     }
   }
 
@@ -279,6 +298,23 @@ export function ContactForm() {
         />
       </div>
 
+      {captchaEnabled && (
+        <div className="space-y-2">
+          <RecaptchaV2
+            ref={recaptchaRef}
+            onChange={(t) => {
+              setRecaptchaToken(t)
+              if (t) setCaptchaHint(false)
+            }}
+          />
+          {captchaHint && (
+            <p className="text-sm text-destructive">
+              Cochez la case « Je ne suis pas un robot » avant d&apos;envoyer.
+            </p>
+          )}
+        </div>
+      )}
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-muted-foreground">
           En envoyant ce formulaire, vous acceptez d&apos;être recontacté concernant
@@ -286,7 +322,7 @@ export function ContactForm() {
         </p>
         <motion.button
           type="submit"
-          disabled={status === "sending"}
+          disabled={status === "sending" || (captchaEnabled && !recaptchaToken)}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className={cn(
