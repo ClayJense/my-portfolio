@@ -81,7 +81,10 @@ export const RecaptchaV2 = forwardRef<RecaptchaV2Handle, RecaptchaV2Props>(
         widgetIdRef.current = id
       }
 
-      window.grecaptcha.ready(() => {
+      const grecaptcha = window.grecaptcha
+      if (!grecaptcha) return
+
+      grecaptcha.ready(() => {
         if (!cancelled) mount()
       })
 
