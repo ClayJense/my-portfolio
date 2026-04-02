@@ -1,43 +1,60 @@
 "use client"
 
 import { motion } from "motion/react"
+import Image from "next/image"
 
 interface BlogPostContentProps {
   content: string
+  coverImage?: string
 }
 
-export function BlogPostContent({ content }: BlogPostContentProps) {
+export function BlogPostContent({ content, coverImage }: BlogPostContentProps) {
   const sections = content.split(/(?=^## )/m).filter(Boolean)
 
   return (
-    <div className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-p:leading-relaxed prose-a:text-primary prose-pre:bg-muted prose-pre:border prose-pre:rounded-lg">
-      {sections.map((section, i) => {
-        const lines = section.trim().split("\n")
-        const first = lines[0]
-        const isHeading = first?.startsWith("## ")
-        const title = isHeading ? first.replace(/^## /, "").trim() : null
-        const body = (isHeading ? lines.slice(1).join("\n") : section).trim()
+    <div className="space-y-10">
+      {coverImage && (
+        <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-muted">
+          <Image
+            src={coverImage}
+            alt=""
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, 672px"
+          />
+        </div>
+      )}
 
-        return (
-          <motion.section
-            key={i}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-40px" }}
-            transition={{ duration: 0.35 }}
-            className="mt-10 first:mt-0"
-          >
-            {title && (
-              <h2 className="text-xl font-semibold text-foreground md:text-2xl">
-                {title}
-              </h2>
-            )}
-            <div className="mt-4 text-muted-foreground">
-              <MarkdownBody text={body} />
-            </div>
-          </motion.section>
-        )
-      })}
+      <div className="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-p:leading-relaxed prose-a:text-primary prose-pre:bg-muted prose-pre:border prose-pre:rounded-lg">
+        {sections.map((section, i) => {
+          const lines = section.trim().split("\n")
+          const first = lines[0]
+          const isHeading = first?.startsWith("## ")
+          const title = isHeading ? first.replace(/^## /, "").trim() : null
+          const body = (isHeading ? lines.slice(1).join("\n") : section).trim()
+
+          return (
+            <motion.section
+              key={i}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.35 }}
+              className="mt-10 first:mt-0"
+            >
+              {title && (
+                <h2 className="text-xl font-semibold text-foreground md:text-2xl">
+                  {title}
+                </h2>
+              )}
+              <div className="mt-4 text-muted-foreground">
+                <MarkdownBody text={body} />
+              </div>
+            </motion.section>
+          )
+        })}
+      </div>
     </div>
   )
 }

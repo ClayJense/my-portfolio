@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, FileDown } from "lucide-react"
 import { motion } from "motion/react"
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect"
 import { cn } from "@/lib/utils"
@@ -114,6 +114,13 @@ export function HeroSection({
           className="inline-flex items-center rounded-full border border-border bg-background px-6 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           Me contacter
+        </Link>
+        <Link
+          href="/cv"
+          className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-6 py-3 text-sm font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <FileDown className="size-4" aria-hidden />
+          Mon CV
         </Link>
       </motion.div>
     </SectionWrapper>

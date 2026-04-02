@@ -324,7 +324,7 @@ Le frontend interagit avec l’API Flask via des requêtes HTTP, ce qui permet d
     date: "2024-01-01",
     readingTime: 1,
     tags: ["IA", "Chatbot", "Flask", "Python"],
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1762330467475-a565d04e1808?fm=jpg&q=80&w=800&auto=format&fit=crop",
   },
   {
     slug: "udb",
@@ -368,7 +368,7 @@ Ce projet a été réalisé lors d’un **stage de 4 mois** au sein de l’Unive
     date: "2024-07-01",
     readingTime: 1,
     tags: ["Laravel", "Angular", "MySQL", "OVH"],
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1618255630366-f402c45736f6?fm=jpg&q=80&w=800&auto=format&fit=crop",
   },
   {
     slug: "biacode",
@@ -414,7 +414,7 @@ BIACode est devenu le **point de départ** de plusieurs collaborations, dont le 
     date: "2024-09-01",
     readingTime: 1,
     tags: ["Agence", "Plateforme"],
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1702047149248-a6049168d2a8?fm=jpg&q=80&w=800&auto=format&fit=crop",
   },
   {
     slug: "easytecs",
@@ -469,7 +469,7 @@ Une **plateforme claire et professionnelle** qui renforce l’image d’EASYTECS
     date: "2026-03-01",
     readingTime: 2,
     tags: ["État civil", "e-Gouvernance", "Sénégal"],
-    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=80",
+    image: "https://images.unsplash.com/photo-1581553672347-95d9444c0d2c?fm=jpg&q=80&w=800&auto=format&fit=crop",
   },
 ]
 

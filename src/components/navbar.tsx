@@ -8,6 +8,7 @@ import {
   Linkedin,
   Home,
   FileText,
+  IdCard,
   Mail,
   PanelBottomOpen,
   X,
@@ -20,6 +21,7 @@ import { cn } from "@/lib/utils"
 const pageLinks = [
   { href: "/", label: "Accueil", icon: Home },
   { href: "/blog", label: "Blog", icon: FileText },
+  { href: "/cv", label: "CV", icon: IdCard },
   { href: "/contact", label: "Contact", icon: Mail },
 ]
 

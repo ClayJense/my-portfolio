@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowLeft, Mail, MessageCircle } from "lucide-react"
+import { ArrowLeft, FileDown, Mail, MessageCircle } from "lucide-react"
 import { ContactForm } from "@/components/contact/contact-form"
 
 export const metadata = {
@@ -27,12 +27,30 @@ export default function ContactPage() {
           </p>
         </header>
         <div className="space-y-10">
+          <Link
+            href="/cv"
+            className="flex items-center justify-between gap-4 rounded-xl border border-primary/25 bg-primary/5 p-4 shadow-sm transition-colors hover:bg-primary/10 sm:p-5"
+          >
+            <div>
+              <p className="text-sm font-semibold text-foreground">Curriculum vitae</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Consultez mon CV et téléchargez-le en PDF directement depuis la page.
+              </p>
+            </div>
+            <span className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
+              <FileDown className="size-4" aria-hidden />
+              Ouvrir
+            </span>
+          </Link>
           <section className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
             <h2 className="sr-only">Coordonnées</h2>
             <ul className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6">
               <li className="flex items-center gap-3 text-muted-foreground">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <Mail className="size-5" />
+                <span
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md ring-2 ring-primary/25 [&_svg]:stroke-[2.25]"
+                  aria-hidden
+                >
+                  <Mail className="size-5 shrink-0 text-primary-foreground" aria-hidden />
                 </span>
                 <div>
                   <span className="block text-sm font-medium text-foreground">
@@ -47,8 +65,11 @@ export default function ContactPage() {
                 </div>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <MessageCircle className="size-5" />
+                <span
+                  className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-md ring-2 ring-primary/25 [&_svg]:stroke-[2.25]"
+                  aria-hidden
+                >
+                  <MessageCircle className="size-5 shrink-0 text-primary-foreground" aria-hidden />
                 </span>
                 <div>
                   <span className="block text-sm font-medium text-foreground">
