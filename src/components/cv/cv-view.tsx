@@ -60,7 +60,7 @@ const SKILL_TAGS = [
 
 const EXPERIENCES = [
   {
-    period: "2024 — présent",
+    period: "2025 — présent",
     title: "Co-fondateur & développeur full-stack",
     org: "BIACode",
     detail:
@@ -76,7 +76,7 @@ const EXPERIENCES = [
     href: "https://www.easytecs.tech/",
   },
   {
-    period: "Juillet 2024",
+    period: "Juillet 2025",
     title: "Stage — équipe de 4",
     org: "Université Dakar-Bourguiba (UDB)",
     detail:
