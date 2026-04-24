@@ -29,7 +29,7 @@ const CONTACT = {
 
 const SOCIAL = [
   { label: "GitHub", href: "https://github.com/ClayJense", icon: Github },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/izayid-ali", icon: Linkedin },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/ali-izayid/", icon: Linkedin },
   { label: "X", href: "https://x.com/Izayid04", icon: null as null },
 ] as const
 
@@ -60,7 +60,7 @@ const SKILL_TAGS = [
 
 const EXPERIENCES = [
   {
-    period: "2024 — présent",
+    period: "2025 — présent",
     title: "Co-fondateur & développeur full-stack",
     org: "BIACode",
     detail:
@@ -76,7 +76,7 @@ const EXPERIENCES = [
     href: "https://www.easytecs.tech/",
   },
   {
-    period: "Juillet 2024",
+    period: "Juillet 2025",
     title: "Stage — équipe de 4",
     org: "Université Dakar-Bourguiba (UDB)",
     detail:
