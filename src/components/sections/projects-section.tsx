@@ -20,7 +20,7 @@ export interface ProjectTechIcon {
 export interface Project {
   title: string
   description: string
-  /** Mois et année uniquement, ex. "Juillet 2024" */
+  /** Mois et année uniquement, ex. "Juillet 2025" */
   date?: string
   /** Slug du post détaillé dans `src/data/blog.ts` (quand disponible) */
   slug?: string
@@ -53,7 +53,7 @@ const defaultProjects: Project[] = [
     title: "Université Dakar-Bourguiba (UDB)",
     description:
       "Projet réalisé lors d'un stage de 4 mois avec une équipe de 4 étudiants : site et applications pour l'université. Back-end Laravel, front-end Angular, base MySQL, hébergement OVH.",
-    date: "Juillet 2024",
+    date: "Juillet 2025",
     slug: "udb",
     tags: ["Laravel", "Angular", "MySQL", "OVH"],
     image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80",
@@ -72,7 +72,7 @@ const defaultProjects: Project[] = [
     title: "BIACode",
     description:
       "Notre plateforme et agence tech, lancée à trois. BIACode est notre structure dédiée au développement et à l'accompagnement des projets numériques.",
-    date: "Septembre 2024",
+    date: "Septembre 2025",
     slug: "biacode",
     tags: ["Agence", "Plateforme"],
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80",
@@ -151,11 +151,17 @@ const DESKTOP_VIEWPORT_HEIGHT = 960
 
 /** Cadre type navigateur avec iframe : site en direct en vue desktop (1280px) puis mis à l'échelle. */
 function BrowserPreview({ url, title }: { url: string; title: string }) {
-  const displayUrl = url.replace(/^https?:\/\//, "").replace(/\/$/, "")
   const wrapperRef = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(1)
+  /** Évite les divergences SSR / premier rendu client (iframe + resize) */
+  const [iframeReady, setIframeReady] = useState(false)
 
   useEffect(() => {
+    setIframeReady(true)
+  }, [])
+
+  useEffect(() => {
+    if (!iframeReady) return
     const el = wrapperRef.current
     if (!el) return
     const updateScale = () => {
@@ -166,7 +172,7 @@ function BrowserPreview({ url, title }: { url: string; title: string }) {
     const ro = new ResizeObserver(updateScale)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [])
+  }, [iframeReady])
 
   return (
     <div className="flex flex-col overflow-hidden rounded-t-xl border-b border-border bg-muted/50">
@@ -176,10 +182,12 @@ function BrowserPreview({ url, title }: { url: string; title: string }) {
           <span className="size-2 rounded-full bg-[#febc2e] sm:size-2.5" aria-hidden />
           <span className="size-2 rounded-full bg-[#28c840] sm:size-2.5" aria-hidden />
         </div>
-        <div className="min-w-0 flex-1 rounded-md border border-border bg-muted/80 px-2 py-1">
-          <span className="truncate text-[10px] sm:text-xs text-muted-foreground">
-            {displayUrl}
-          </span>
+        {/* Pas d’URL de domaine : barre factice, l’aperçu réel est l’iframe ci-dessous */}
+        <div
+          className="min-w-0 flex-1 min-h-7 rounded-md border border-border/60 bg-muted/40"
+          aria-hidden="true"
+        >
+          {/* Espace visuel, pas d’URL — évite les divergences SSR/client */}
         </div>
       </div>
       {/* Vue desktop : iframe 1280×960 → le site affiche sa version desktop, puis on scale pour remplir le cadre */}
@@ -188,25 +196,29 @@ function BrowserPreview({ url, title }: { url: string; title: string }) {
         className="relative w-full overflow-hidden bg-muted"
         style={{ aspectRatio: "4/3" }}
       >
-        <div
-          className="absolute left-0 top-0 origin-top-left"
-          style={{
-            width: DESKTOP_VIEWPORT_WIDTH,
-            height: DESKTOP_VIEWPORT_HEIGHT,
-            transform: `scale(${scale})`,
-          }}
-        >
-          <iframe
-            src={url}
-            title={`Aperçu : ${title}`}
-            width={DESKTOP_VIEWPORT_WIDTH}
-            height={DESKTOP_VIEWPORT_HEIGHT}
-            className="border-0"
-            loading="lazy"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            referrerPolicy="no-referrer"
-          />
-        </div>
+        {!iframeReady ? (
+          <div className="absolute inset-0 animate-pulse bg-muted" aria-hidden />
+        ) : (
+          <div
+            className="absolute left-0 top-0 origin-top-left"
+            style={{
+              width: DESKTOP_VIEWPORT_WIDTH,
+              height: DESKTOP_VIEWPORT_HEIGHT,
+              transform: `scale(${scale})`,
+            }}
+          >
+            <iframe
+              src={url}
+              title={`Aperçu : ${title}`}
+              width={DESKTOP_VIEWPORT_WIDTH}
+              height={DESKTOP_VIEWPORT_HEIGHT}
+              className="border-0"
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        )}
       </div>
     </div>
   )

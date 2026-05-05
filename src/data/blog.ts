@@ -365,7 +365,7 @@ Ce projet a été réalisé lors d’un **stage de 4 mois** au sein de l’Unive
 
 [Visiter le site →](https://udb.sn/)
     `.trim(),
-    date: "2024-07-01",
+    date: "2025-07-01",
     readingTime: 1,
     tags: ["Laravel", "Angular", "MySQL", "OVH"],
     image: "https://images.unsplash.com/photo-1618255630366-f402c45736f6?fm=jpg&q=80&w=800&auto=format&fit=crop",
@@ -411,7 +411,7 @@ BIACode est devenu le **point de départ** de plusieurs collaborations, dont le 
 
 [Visiter le site →](https://www.biacode.tech/)
     `.trim(),
-    date: "2024-09-01",
+    date: "2025-09-01",
     readingTime: 1,
     tags: ["Agence", "Plateforme"],
     image: "https://images.unsplash.com/photo-1702047149248-a6049168d2a8?fm=jpg&q=80&w=800&auto=format&fit=crop",
