@@ -1,47 +1,62 @@
 "use client"
 
+import Link from "next/link"
 import Image from "next/image"
 import { motion } from "motion/react"
+import { BadgeCheck, FileText, Github, Linkedin, Mail } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import { SectionWrapper } from "@/components/layout"
-
-interface HeroSectionProps {
-  className?: string
-  title?: string
-  subtitle?: string
-}
+import { socialLinks } from "@/config/site"
+import { techCategories } from "@/data/tech-icons"
 
 const ringConfigs = [
-  { size: 940, rotate: "hero-spin-slow", iconSize: 46, iconCount: 6, radiusRatio: 0.47 },
-  { size: 700, rotate: "hero-spin-reverse", iconSize: 44, iconCount: 5, radiusRatio: 0.45 },
-  { size: 500, rotate: "hero-spin-slow", iconSize: 40, iconCount: 4, radiusRatio: 0.43 },
+  { size: 1180, rotate: "hero-spin-slow", iconSize: 40, iconCount: 9, radiusRatio: 0.48 },
+  { size: 900, rotate: "hero-spin-reverse", iconSize: 38, iconCount: 7, radiusRatio: 0.47 },
+  { size: 660, rotate: "hero-spin-slow", iconSize: 34, iconCount: 5, radiusRatio: 0.46 },
 ]
 
+const githubHeroIcon = "https://cdn.simpleicons.org/github/181717"
+
+const techByName = new Map(
+  techCategories.flatMap((category) => category.items.map((item) => [item.name, item.icon] as const))
+)
+
 const heroIconUrls = [
-  "https://cdn.simpleicons.org/react/61DAFB",
-  "https://cdn.simpleicons.org/nextdotjs/111111",
-  "https://cdn.simpleicons.org/typescript/3178C6",
-  "https://cdn.simpleicons.org/nodedotjs/339933",
-  "https://cdn.simpleicons.org/nestjs/E0234E",
-  "https://cdn.simpleicons.org/laravel/FF2D20",
-  "https://cdn.simpleicons.org/docker/2496ED",
-  "https://cdn.simpleicons.org/tailwindcss/06B6D4",
-  "https://cdn.simpleicons.org/git/F05032",
-]
+  techByName.get("Next.js"),
+  techByName.get("Angular"),
+  techByName.get("React"),
+  techByName.get("TypeScript"),
+  techByName.get("Node.js"),
+  techByName.get("Nest.js"),
+  techByName.get("Laravel"),
+  techByName.get("Spring Boot"),
+  techByName.get("Docker"),
+  techByName.get("Linux"),
+  techByName.get("AWS"),
+  techByName.get("Git"),
+  githubHeroIcon,
+].filter((value): value is string => Boolean(value))
 
 export function HeroSection({
   className,
-  title = "Construire des experiences web qui marquent les esprits.",
-  subtitle = "Architecture solide, design premium, execution propre: du concept au produit qui performe.",
-}: HeroSectionProps) {
+  title = "Des produits web solides, elegants et memorables.",
+  subtitle = "Je conçois des experiences modernes qui allient performance, design et impact business.",
+}: {
+  className?: string
+  title?: string
+  subtitle?: string
+}) {
+  const github = socialLinks.find((item) => item.label === "GitHub")?.href ?? "https://github.com/ClayJense"
+  const linkedin =
+    socialLinks.find((item) => item.label === "LinkedIn")?.href ?? "https://www.linkedin.com/in/ali-izayid/"
   const icons = heroIconUrls
 
   return (
     <SectionWrapper
       id={siteConfig.sections.hero}
       className={cn(
-        "relative overflow-hidden flex min-h-[92vh] flex-col justify-center border-b border-border/40 bg-[radial-gradient(circle_at_50%_45%,hsl(var(--primary)/0.15),transparent_55%)]",
+        "relative overflow-hidden flex min-h-[92vh] flex-col justify-center border-b border-border/40",
         className
       )}
       containerClassName="flex flex-col items-center text-center"
@@ -55,8 +70,15 @@ export function HeroSection({
           from { transform: translate(-50%, -50%) rotate(0deg); }
           to { transform: translate(-50%, -50%) rotate(-360deg); }
         }
+        @keyframes hero-float {
+          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+          50% { transform: translate3d(0, -14px, 0) scale(1.04); }
+        }
         .hero-spin-slow { animation: hero-spin-slow 80s linear infinite; }
         .hero-spin-reverse { animation: hero-spin-reverse 90s linear infinite; }
+        .hero-float {
+          animation: hero-float 7s ease-in-out infinite;
+        }
       `}</style>
 
       <div className="pointer-events-none absolute inset-0">
@@ -67,27 +89,32 @@ export function HeroSection({
             style={{ width: ring.size, height: ring.size }}
           >
             {new Array(ring.iconCount).fill(0).map((_, iconIndex) => {
-              const icon = icons[(iconIndex + ringIndex * 3) % icons.length]
+              const icon =
+                ringIndex === 0 && iconIndex === 0
+                  ? githubHeroIcon
+                  : icons[(iconIndex + ringIndex * 3) % icons.length]
               const angleOffset = (ringIndex * Math.PI) / (ring.iconCount * 2)
               const angle = (iconIndex / ring.iconCount) * Math.PI * 2 + angleOffset
               const radius = ring.size * ring.radiusRatio
               const x = Math.cos(angle) * radius
               const y = Math.sin(angle) * radius
+              const isGithubIcon = icon === githubHeroIcon
 
               return (
                 <div
                   key={`icon-${ringIndex}-${iconIndex}`}
                   className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                  style={{
-                    transform: `translate(${x}px, ${y}px)`,
-                  }}
+                  style={{ transform: `translate(${x}px, ${y}px)` }}
                 >
                   <Image
                     src={icon}
                     alt=""
                     width={ring.iconSize}
                     height={ring.iconSize}
-                    className="object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.18)]"
+                    className={cn(
+                      "object-contain opacity-95 drop-shadow-[0_4px_10px_rgba(0,0,0,0.18)]",
+                      isGithubIcon && "scale-110 opacity-100 drop-shadow-[0_6px_14px_rgba(0,0,0,0.28)]"
+                    )}
                     unoptimized
                   />
                 </div>
@@ -95,12 +122,42 @@ export function HeroSection({
             })}
           </div>
         ))}
+        <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-primary/25 blur-3xl hero-float" />
+        <div className="absolute -right-24 top-1/3 h-80 w-80 rounded-full bg-violet-500/20 blur-3xl hero-float" />
+        <div className="absolute left-1/2 top-[62%] h-96 w-96 -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl hero-float" />
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45 }}
+        className="relative z-10 mb-6 inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/70 px-4 py-2 text-xs font-medium text-muted-foreground backdrop-blur-md"
+      >
+        <BadgeCheck className="size-4 text-primary" />
+        Disponible pour missions et collaborations
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.92 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.45, delay: 0.08 }}
+        className="relative z-10 mb-6 rounded-full border border-border/70 bg-card/70 p-2 shadow-xl backdrop-blur-md"
+      >
+        <Image
+          src="/logo.png"
+          alt="Iza"
+          width={128}
+          height={128}
+          className="size-24 rounded-full object-contain sm:size-28"
+          priority
+        />
+      </motion.div>
+
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.12 }}
-        className="relative z-10 max-w-4xl mt-6 sm:mt-10"
+        transition={{ duration: 0.5, delay: 0.16 }}
+        className="relative z-10 max-w-4xl"
       >
         <h1 className="text-balance text-3xl font-semibold leading-tight text-foreground sm:text-5xl md:text-6xl">
           {title}
@@ -110,9 +167,49 @@ export function HeroSection({
         </p>
       </motion.div>
 
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,hsl(var(--background))_5%,transparent_35%,transparent_70%,hsl(var(--background))_100%)]" />
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.24 }}
+        className="relative z-10 mt-8 flex flex-wrap justify-center gap-3"
+      >
+        <Link
+          href={github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-5 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:scale-[1.03] hover:border-primary/60"
+        >
+          <Github className="size-4" />
+          GitHub
+        </Link>
+        <Link
+          href={linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-5 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:scale-[1.03] hover:border-primary/60"
+        >
+          <Linkedin className="size-4" />
+          LinkedIn
+        </Link>
+        <Link
+          href="/contact"
+          className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-5 py-2.5 text-sm font-medium text-primary shadow-sm transition-all hover:scale-[1.03] hover:bg-primary/15"
+        >
+          <Mail className="size-4" />
+          Me contacter
+        </Link>
+        <Link
+          href="/cv"
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-5 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:scale-[1.03] hover:border-primary/60"
+        >
+          <FileText className="size-4" />
+          Voir mon CV
+        </Link>
+      </motion.div>
 
-      <div className="relative z-10 mt-10 text-xs uppercase tracking-[0.18em] text-primary/80">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,hsl(var(--background))_10%,transparent_38%,transparent_72%,hsl(var(--background))_100%)]" />
+
+      <div className="relative z-10 mt-8 text-xs uppercase tracking-[0.18em] text-primary/80">
         {siteConfig.name}
       </div>
     </SectionWrapper>
