@@ -7,8 +7,8 @@ import { ADMIN_KEYS, DEMO_ADMIN } from "@/data/admin-demo"
 
 export default function AdminLoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState(DEMO_ADMIN.email)
-  const [password, setPassword] = useState(DEMO_ADMIN.password)
+  const [email, setEmail] = useState<string>(DEMO_ADMIN.email)
+  const [password, setPassword] = useState<string>(DEMO_ADMIN.password)
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 

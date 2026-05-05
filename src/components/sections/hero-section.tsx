@@ -16,7 +16,7 @@ const ringConfigs = [
   { size: 660, rotate: "hero-spin-slow", iconSize: 34, iconCount: 5, radiusRatio: 0.46 },
 ]
 
-const githubHeroIcon = "https://cdn.simpleicons.org/github/181717"
+const githubHeroIcon = "github-local-icon"
 
 const techByName = new Map(
   techCategories.flatMap((category) => category.items.map((item) => [item.name, item.icon] as const))
@@ -90,7 +90,7 @@ export function HeroSection({
           >
             {new Array(ring.iconCount).fill(0).map((_, iconIndex) => {
               const icon =
-                ringIndex === 0 && iconIndex === 0
+                ringIndex === 2 && iconIndex === 0
                   ? githubHeroIcon
                   : icons[(iconIndex + ringIndex * 3) % icons.length]
               const angleOffset = (ringIndex * Math.PI) / (ring.iconCount * 2)
@@ -106,17 +106,22 @@ export function HeroSection({
                   className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
                   style={{ transform: `translate(${x}px, ${y}px)` }}
                 >
-                  <Image
-                    src={icon}
-                    alt=""
-                    width={ring.iconSize}
-                    height={ring.iconSize}
-                    className={cn(
-                      "object-contain opacity-95 drop-shadow-[0_4px_10px_rgba(0,0,0,0.18)]",
-                      isGithubIcon && "scale-110 opacity-100 drop-shadow-[0_6px_14px_rgba(0,0,0,0.28)]"
-                    )}
-                    unoptimized
-                  />
+                  {isGithubIcon ? (
+                    <Github
+                      style={{ width: ring.iconSize + 4, height: ring.iconSize + 4 }}
+                      className="text-foreground drop-shadow-[0_6px_14px_rgba(0,0,0,0.28)]"
+                      strokeWidth={2.25}
+                    />
+                  ) : (
+                    <Image
+                      src={icon}
+                      alt=""
+                      width={ring.iconSize}
+                      height={ring.iconSize}
+                      className="object-contain opacity-95 drop-shadow-[0_4px_10px_rgba(0,0,0,0.18)]"
+                      unoptimized
+                    />
+                  )}
                 </div>
               )
             })}
