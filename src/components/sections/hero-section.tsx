@@ -1,128 +1,120 @@
 "use client"
 
-import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, FileDown } from "lucide-react"
 import { motion } from "motion/react"
-import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/config/site"
 import { SectionWrapper } from "@/components/layout"
 
 interface HeroSectionProps {
   className?: string
-  words?: { text: string; className?: string }[]
-  subline?: string
-  description?: string
-  ctaLabel?: string
-  ctaHref?: string
+  title?: string
+  subtitle?: string
 }
 
-const defaultWords = [
-  { text: "Construire", className: "text-foreground" },
-  { text: "des", className: "text-foreground" },
-  { text: "applications", className: "text-foreground" },
-  { text: "stables", className: "text-primary" },
-  { text: "et", className: "text-foreground" },
-  { text: "utiles.", className: "text-foreground" },
+const ringConfigs = [
+  { size: 940, rotate: "hero-spin-slow", iconSize: 46, iconCount: 6, radiusRatio: 0.47 },
+  { size: 700, rotate: "hero-spin-reverse", iconSize: 44, iconCount: 5, radiusRatio: 0.45 },
+  { size: 500, rotate: "hero-spin-slow", iconSize: 40, iconCount: 4, radiusRatio: 0.43 },
+]
+
+const heroIconUrls = [
+  "https://cdn.simpleicons.org/react/61DAFB",
+  "https://cdn.simpleicons.org/nextdotjs/111111",
+  "https://cdn.simpleicons.org/typescript/3178C6",
+  "https://cdn.simpleicons.org/nodedotjs/339933",
+  "https://cdn.simpleicons.org/nestjs/E0234E",
+  "https://cdn.simpleicons.org/laravel/FF2D20",
+  "https://cdn.simpleicons.org/docker/2496ED",
+  "https://cdn.simpleicons.org/tailwindcss/06B6D4",
+  "https://cdn.simpleicons.org/git/F05032",
 ]
 
 export function HeroSection({
   className,
-  words = defaultWords,
-  subline = "Développeur full‑stack orienté backend & DevOps",
-  description = "Développeur Full-Stack passionné, je conçois des applications web robustes et scalables. Spécialisé en Backend (Nest.js, Laravel, Spring Boot), j'accorde une importance particulière à l'architecture logicielle tout en créant des interfaces modernes avec Next.js et Angular. Mon approche inclut une dimension DevOps (Docker, Linux, Cloud) pour garantir des déploiements fluides et performants.",
-  ctaLabel = "Voir mes projets",
-  ctaHref = `#${siteConfig.sections.projects}`,
+  title = "Construire des experiences web qui marquent les esprits.",
+  subtitle = "Architecture solide, design premium, execution propre: du concept au produit qui performe.",
 }: HeroSectionProps) {
+  const icons = heroIconUrls
+
   return (
     <SectionWrapper
       id={siteConfig.sections.hero}
       className={cn(
-        "flex min-h-[85vh] sm:min-h-[90vh] flex-col justify-center border-b border-border/40",
+        "relative overflow-hidden flex min-h-[92vh] flex-col justify-center border-b border-border/40 bg-[radial-gradient(circle_at_50%_45%,hsl(var(--primary)/0.15),transparent_55%)]",
         className
       )}
       containerClassName="flex flex-col items-center text-center"
     >
-      {/* Logo à gauche, titre + sous-titre à droite */}
-      <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 w-full max-w-4xl mb-8">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="shrink-0"
-        >
-          <Image
-            src="/logo.png"
-            alt="Iza"
-            width={256}
-            height={256}
-            className="size-24 sm:size-32 md:size-40 rounded-2xl object-contain"
-            priority
-          />
-        </motion.div>
-        <div className="flex flex-col items-center sm:items-start text-center sm:text-left min-w-0">
-          <motion.h2
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-xl font-semibold text-foreground sm:text-2xl md:text-3xl"
+      <style>{`
+        @keyframes hero-spin-slow {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        @keyframes hero-spin-reverse {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+        .hero-spin-slow { animation: hero-spin-slow 80s linear infinite; }
+        .hero-spin-reverse { animation: hero-spin-reverse 90s linear infinite; }
+      `}</style>
+
+      <div className="pointer-events-none absolute inset-0">
+        {ringConfigs.map((ring, ringIndex) => (
+          <div
+            key={`ring-${ring.size}`}
+            className={cn("absolute left-1/2 top-1/2", ring.rotate)}
+            style={{ width: ring.size, height: ring.size }}
           >
-            Salut, moi c&apos;est{" "}
-            <span className="text-primary">Iza</span> 👋
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-1 sm:mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground md:text-sm"
-          >
-            {subline}
-          </motion.p>
-        </div>
+            {new Array(ring.iconCount).fill(0).map((_, iconIndex) => {
+              const icon = icons[(iconIndex + ringIndex * 3) % icons.length]
+              const angleOffset = (ringIndex * Math.PI) / (ring.iconCount * 2)
+              const angle = (iconIndex / ring.iconCount) * Math.PI * 2 + angleOffset
+              const radius = ring.size * ring.radiusRatio
+              const x = Math.cos(angle) * radius
+              const y = Math.sin(angle) * radius
+
+              return (
+                <div
+                  key={`icon-${ringIndex}-${iconIndex}`}
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                  style={{
+                    transform: `translate(${x}px, ${y}px)`,
+                  }}
+                >
+                  <Image
+                    src={icon}
+                    alt=""
+                    width={ring.iconSize}
+                    height={ring.iconSize}
+                    className="object-contain drop-shadow-[0_4px_10px_rgba(0,0,0,0.18)]"
+                    unoptimized
+                  />
+                </div>
+              )
+            })}
+          </div>
+        ))}
       </div>
-      <div className="mt-2 flex flex-col items-center justify-center">
-        <TypewriterEffectSmooth
-          words={words}
-          className="text-foreground"
-          cursorClassName="bg-primary h-6 w-1 sm:h-8 md:h-10"
-        />
-      </div>
-      <motion.p
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.25 }}
-        className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-lg md:text-xl px-2 sm:px-0"
-      >
-        {description}
-      </motion.p>
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.35 }}
-        className="mt-10 flex flex-wrap items-center justify-center gap-4"
+        transition={{ duration: 0.5, delay: 0.12 }}
+        className="relative z-10 max-w-4xl mt-6 sm:mt-10"
       >
-        <Link
-          href={ctaHref}
-          className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          {ctaLabel}
-          <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-        </Link>
-        <Link
-          href="/contact"
-          className="inline-flex items-center rounded-full border border-border bg-background px-6 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          Me contacter
-        </Link>
-        <Link
-          href="/cv"
-          className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-6 py-3 text-sm font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          <FileDown className="size-4" aria-hidden />
-          Mon CV
-        </Link>
+        <h1 className="text-balance text-3xl font-semibold leading-tight text-foreground sm:text-5xl md:text-6xl">
+          {title}
+        </h1>
+        <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm text-muted-foreground sm:text-base md:text-lg">
+          {subtitle}
+        </p>
       </motion.div>
+
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,hsl(var(--background))_5%,transparent_35%,transparent_70%,hsl(var(--background))_100%)]" />
+
+      <div className="relative z-10 mt-10 text-xs uppercase tracking-[0.18em] text-primary/80">
+        {siteConfig.name}
+      </div>
     </SectionWrapper>
   )
 }
